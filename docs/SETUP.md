@@ -17,7 +17,9 @@ Restart development after changing shared package source, or run that package's 
 
 Run `pnpm env:setup` to create missing runtime, web, migration and provisioning environment files from their templates without overwriting settings. These copies are optional for the credential-free preview. Never commit populated environment files.
 
-The API binds to loopback by default. Set `PORT` to change its port and adjust the Vite proxy if needed. `WEB_ORIGIN` is a comma-separated list of exact frontend origins. The browser's `VITE_API_URL` is the API origin without `/api`; leave it empty for the development proxy. Configure it for independently hosted production apps.
+Use `pnpm env:setup --mode test` or `--mode production` for separate files. Test/production never read development `.env` files. API `start` selects production and requires explicit database/Auth/CORS values. See [configuration](CONFIGURATION.md) for precedence and rotation.
+
+The API binds to loopback by default; use `HOST` deliberately for container hosting. Set `PORT` to change its port and adjust the Vite proxy if needed. `WEB_ORIGIN` lists exact frontend origins. Browser `VITE_API_URL` is the API origin without `/api`; empty uses the development proxy or a configured production same-origin proxy. Production builds use only production public configuration.
 
 ## Dedicated Supabase project
 

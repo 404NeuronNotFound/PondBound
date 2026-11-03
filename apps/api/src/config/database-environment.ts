@@ -6,7 +6,9 @@ export const runtimeDatabaseUrl = z.url().superRefine((value, context) => {
   if (!['postgres:', 'postgresql:'].includes(url.protocol)) {
     context.addIssue({ code: 'custom', message: 'Use a PostgreSQL URL' });
   }
-  if (decodeURIComponent(url.username).split('.')[0] !== 'pondbound_api') {
+  let role = '';
+  try { role = decodeURIComponent(url.username).split('.')[0] ?? ''; } catch { /* Invalid escaping is rejected below. */ }
+  if (role !== 'pondbound_api') {
     context.addIssue({ code: 'custom', message: 'The runtime must use the pondbound_api database role' });
   }
   if (!['localhost', '127.0.0.1', '[::1]'].includes(url.hostname)

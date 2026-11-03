@@ -7,8 +7,14 @@ import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const require = createRequire(new URL('../apps/api/package.json', import.meta.url));
 const { parse } = require('dotenv');
+function environmentFiles(directory) {
+  const path = join(root, directory);
+  return readdirSync(path, { withFileTypes: true })
+    .filter(entry => entry.isFile() && /^\.env($|\.)/.test(entry.name) && !entry.name.endsWith('.example'))
+    .map(entry => `${directory}/${entry.name}`);
+}
 const serverConfigurations = [process.env];
-for (const file of ['apps/api/.env', 'apps/api/.env.migrations', 'deployment/supabase/.env']) {
+for (const file of [...environmentFiles('apps/api'), ...environmentFiles('deployment/supabase')]) {
   const path = join(root, file);
   if (existsSync(path)) serverConfigurations.push(parse(readFileSync(path, 'utf8')));
 }
@@ -35,7 +41,7 @@ for (const file of files) {
 // Vite exposes VITE_* values to the browser. Detect misplaced credentials even
 // when they have been given the publishable-key variable's name.
 const browserConfigurations = [process.env];
-for (const file of ['apps/web/.env', 'apps/web/.env.local', 'apps/web/.env.production', 'apps/web/.env.production.local']) {
+for (const file of environmentFiles('apps/web')) {
   const path = join(root, file);
   if (existsSync(path)) {
     const browserValues = parse(readFileSync(path, 'utf8'));

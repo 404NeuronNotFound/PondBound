@@ -26,6 +26,8 @@ The initial private database schema reserves player identity only. It has no Gol
 
 ## Health and credentials
 
+Mode-specific loaders isolate development, test and production. The API validates startup inputs before creating the server and rejects administrative credentials in its runtime. The browser explicitly receives only validated public configuration. CORS compares exact allowed origins and returns 403 for unlisted requests/preflights. See [configuration and secret management](CONFIGURATION.md).
+
 `GET /health` reports API liveness. `GET /ready` executes `SELECT 1` through Prisma and reports database readiness separately. Original paths `/api/health` and `/api/health/ready` remain compatibility aliases. Probes are version-neutral. An unconfigured database does not prevent frontend and server development.
 
 Runtime database credentials belong only in the API's ignored runtime environment. The Prisma CLI loads a separate ignored migration environment; provisioning scripts load a separate administration environment. The server secret key is used only by infrastructure scripts. Browser variables contain public Supabase credentials. CORS is restricted to configured frontend origins. Bind the API appropriately behind a trusted reverse proxy before deployment.

@@ -4,7 +4,7 @@ Supabase Auth is Pondbound's identity provider. Passwords go directly from the b
 
 ## Configuration and endpoints
 
-The API needs `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` together in `apps/api/.env`. The browser uses their `VITE_` equivalents. Request-time verification uses the public key, no service-role key. The server Auth client has no persisted session and a five-second network timeout. Remote Auth URLs require HTTPS.
+The API needs `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` together in its selected runtime environment. The browser uses their `VITE_` equivalents for the selected build mode. Development uses `.env`; test/production do not inherit it. Request-time verification uses the public key, no service-role key. The server Auth client has no persisted session and a five-second network timeout. Remote Auth URLs require HTTPS. See [configuration](CONFIGURATION.md).
 
 | Method | Route | Behavior |
 | --- | --- | --- |

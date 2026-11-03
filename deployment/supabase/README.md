@@ -15,6 +15,8 @@ Run `pnpm env:setup` from the repository root to create missing local configurat
 
 All populated environment files are ignored by Git. Only placeholder templates and the public CA certificate are committed. Provisioning credentials are not loaded by the API runtime, and migration commands never fall back to runtime credentials.
 
+The bootstrap writes development runtime credentials. Test/production have separate selected files or injected values and never inherit `.env`. Configure the intended project explicitly for each deployment; consult [configuration and secret rotation](../../docs/CONFIGURATION.md).
+
 ## Provision an existing dedicated project
 
 1. In the Supabase project, choose **Connect → Session pooler**. Copy the administrator PostgreSQL URL for port 5432 into `SUPABASE_DB_ADMIN_URL` in the provisioning file. Replace the password placeholder and URL-encode special characters. A reachable direct connection is also supported. Port 6543 is rejected for administration and migrations.

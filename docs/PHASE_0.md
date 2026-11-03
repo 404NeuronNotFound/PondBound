@@ -90,6 +90,14 @@ Verification on November 3, 2026: automated tests passed 20 backend and 18 front
 
 See [authentication](AUTHENTICATION.md) for configuration and `pnpm auth:verify`. No applied schema migration was edited.
 
+## 00.06 — Configuration and secret management
+
+Added separate development/test/production templates and loaders. Process values take precedence; test and production do not inherit development files. Production API startup requires explicit database, Auth and HTTPS CORS configuration. Runtime/admin/migration credentials remain separate. Validation failures report field names without submitted values.
+
+Browser builds explicitly expose only the three validated public variables. Unknown public names and misplaced server credentials fail validation. CORS now validates exact origins, rejects unlisted requests/preflights with JSON 403, allows the required Bearer headers and disables cookie credentials. Secret scanning covers all actual mode files. Rotation guidance covers independent database roles, Supabase API keys and JWT signing keys.
+
+Verification passed 26 backend and 20 frontend tests, lint, typecheck, builds and secret checks. A production startup check failed before serving with missing config and no development fallback. Live CORS checks returned 200 for a listed origin and 403 for an unlisted origin. Mode setup preserved both development-file hashes. No production credentials were populated or rotated. See [configuration](CONFIGURATION.md).
+
 ## Initial scaffold verification — November 3, 2026
 
 - `pnpm install`: passed; generated `pnpm-lock.yaml`.
