@@ -16,6 +16,8 @@ pnpm dev
 Frontend: http://localhost:5173. API: http://127.0.0.1:3000/api/health.
 The frontend proxies `/api` to NestJS during development. Start both processes with the root command.
 
+Backend probes: `/health` for liveness and `/ready` for database readiness. Application API routes use `/api/v1`; the original `/api/health` URL remains supported. See the [API guide](docs/API.md).
+
 No credentials or prebuilt files are required to run the foundation preview. `pnpm dev` builds shared packages once, generates the Prisma client, and starts both apps in watch mode. Stop both with Ctrl+C. Database readiness returns HTTP 503 until a database is configured. See [setup](docs/SETUP.md) for the Supabase connection steps.
 
 Run `pnpm env:setup` when you need app-local `.env` files. This copies the templates and preserves existing settings.

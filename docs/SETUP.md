@@ -26,7 +26,7 @@ Create or select a Supabase project dedicated to Pondbound. Do not reuse PaServe
 1. Copy the PostgreSQL runtime connection string into the API's `DATABASE_URL`. Percent-encode special characters in passwords. Use the Supabase Connect panel's recommended connection method for your network.
 2. Set `DIRECT_URL` to a direct or session-pooler PostgreSQL connection for migrations. Runtime and migration roles should have appropriately scoped permissions. Follow the project's SSL instructions; do not disable certificate verification.
 3. Run `pnpm db:validate`, then `pnpm db:migrate --name foundation` to create and apply the initial migration to the development project. Review its SQL and commit the resulting migration. Use `pnpm db:deploy` for reviewed migrations in deployment.
-4. Restart the API and request `http://127.0.0.1:3000/api/health/ready`. HTTP 200 with `database: connected` confirms a Prisma query succeeded. A 503 reports unconfigured or unavailable without exposing connection secrets.
+4. Restart the API and request `http://127.0.0.1:3000/ready`. HTTP 200 with `database: connected` confirms a Prisma query succeeded. A 503 reports unconfigured or unavailable without exposing connection secrets.
 5. Add the public project URL and publishable key to the web app's Supabase environment variables when enabling authentication. The client is configured but no sign-in interface is implemented in Phase 0.
 
 The initial Player model lives in a private `game` schema. Keep this schema out of Supabase's exposed Data API schemas and do not grant `anon` or `authenticated` direct table access. If a future table is exposed, enable and test Row Level Security before making it client-accessible. The NestJS API will own gameplay writes.
@@ -42,9 +42,12 @@ No cloud resources, storage buckets, auth policies, migrations, or secrets are p
 | `pnpm build` | Generate Prisma client and build packages/apps in dependency order |
 | `pnpm typecheck` | Check TypeScript |
 | `pnpm lint` | Check code conventions |
-| `pnpm test` | Run backend configuration and HTTP integration tests |
+| `pnpm test` | Build shared packages and run frontend and backend tests |
+| `pnpm --filter @pondbound/web test` | Run frontend routing, loading, recovery and lifecycle tests |
 | `pnpm check` | Lint, typecheck, test and production build |
 | `pnpm db:generate` | Generate Prisma client without a live database |
 | `pnpm db:validate` | Validate Prisma schema/configuration |
 
 The generated Prisma client and build outputs are ignored. `pnpm install --frozen-lockfile` plus `pnpm build` reconstructs them. In PowerShell environments that restrict `.ps1` wrappers, use `pnpm.cmd` for every pnpm command. Windows uses the same root commands as macOS and Linux.
+
+Canonical backend probes are `http://localhost:3000/health` and `http://localhost:3000/ready`. Versioned API information is available at `http://localhost:3000/api/v1`. The frontend continues to use the `/api/health` compatibility alias through Vite. See the [API guide](API.md) for contracts and error responses.

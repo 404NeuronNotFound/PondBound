@@ -35,7 +35,32 @@ Acceptance passed on November 3, 2026, on Windows with Node 24.19.0 and pnpm 12.
 
 This verifies 00.01's install-and-run criterion. It does not complete the later authentication, database provisioning or infrastructure work within Phase 00.
 
-## Verification — November 3, 2026
+## 00.02 — React application shell
+
+Implemented React Router routes for `/` and `/play`, a catch-all 404, and a persistent app shell with active navigation and server status. Pages load lazily with an accessible Suspense fallback. Root and route error boundaries offer reload/home recovery; navigation clears a route failure. Phaser startup has a loading overlay, catches asynchronous startup failures and cleans up on unmount.
+
+The responsive baseline supports a 320px minimum viewport, fluid typography, wrapping navigation, a stacked mobile layout and a constrained game aspect ratio. Keyboard support includes a skip link, visible focus, main-content focus after navigation, and document-title changes. Reduced-motion preferences disable the loading animation.
+
+Verification on November 3, 2026:
+
+- `pnpm check` passed lint, TypeScript, frontend tests, both backend tests, and production builds. Final frontend checks passed all 12 tests after adding trailing-slash and timeout coverage.
+- Frontend tests exercise navigation and active links, direct route entry, unknown-route recovery, offline reconnect, request cancellation, lazy loading, rejected imports, route-error recovery, engine readiness and engine cleanup. Phaser is mocked in DOM tests; these do not verify WebGL rendering.
+- HTTP checks returned the app entry at `/`, `/play` and an unknown deep path, confirming Vite's history fallback. Unknown paths render the application 404 while returning HTTP 200 from the SPA host.
+- The browser runtime exposed no browser connection. Responsive appearance, real canvas rendering, and interactive browser history are not visually verified.
+
+Deployment hosts must serve `index.html` for frontend route requests while preserving asset and API routes. See the deployment guide.
+
+## 00.03 — NestJS API foundation
+
+`AppModule` now composes dedicated health and database modules. Canonical version-neutral probes are `/health` and `/ready`, with the previous URLs retained as aliases. Application routes use URI versioning under `/api/v1`; the API identity endpoint demonstrates the versioned namespace.
+
+Global DTO validation rejects extra and invalid fields, transforms DTO instances, and omits submitted values and targets from validation metadata. A global exception filter returns a typed JSON envelope, hides server exception details, and handles unknown routes both inside and outside the API prefix. Readiness reports operational state with HTTP 200/503 and its own probe contract.
+
+HTTP integration tests cover probe aliases, all readiness states, URI version selection, DTO validation, malformed JSON, unknown routes, and exception redaction. Test-only controllers are excluded from the production module. Readiness tests use a substituted provider for connected/unavailable cases; live Supabase connectivity remains pending.
+
+Verification on November 3, 2026: `pnpm check` passed lint, workspace type checking, all 8 backend tests, all 12 frontend tests, and production builds. Live localhost checks returned 200 for `/health`, `/api/v1`, and `/api/health`; 503 for `/ready` and its alias with no database configured; and 404 for unsupported versions and unknown root paths. This completes 00.03's API foundation scope; it does not verify a live Supabase connection.
+
+## Initial scaffold verification — November 3, 2026
 
 - `pnpm install`: passed; generated `pnpm-lock.yaml`.
 - `pnpm check`: passed lint, TypeScript checks, both backend tests, and production builds for shared packages and both apps.

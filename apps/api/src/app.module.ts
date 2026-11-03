@@ -1,6 +1,12 @@
 import { Module } from '@nestjs/common';
-import { DatabaseService } from './database/database.service.js';
-import { HealthController } from './health/health.controller.js';
+import { APP_FILTER } from '@nestjs/core';
+import { HealthModule } from './health/health.module.js';
+import { ApiController } from './api.controller.js';
+import { ApiExceptionFilter } from './common/filters/api-exception.filter.js';
 
-@Module({ controllers: [HealthController], providers: [DatabaseService] })
+@Module({
+  imports: [HealthModule],
+  controllers: [ApiController],
+  providers: [{ provide: APP_FILTER, useClass: ApiExceptionFilter }],
+})
 export class AppModule {}
