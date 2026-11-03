@@ -14,6 +14,7 @@ Keep decision IDs stable. Add a new entry when a choice changes a package bounda
 | ADR-006 | Validated, isolated environment modes and explicit browser configuration | Accepted; implemented                                       |
 | ADR-007 | Required CI check with disposable database tests                         | Accepted; configured in 00.07                               |
 | ADR-008 | Forward migrations, append-only audit and local-only fixtures            | Accepted; 00.08 implemented locally, hosted rollout pending |
+| ADR-009 | Safe structured telemetry and bounded baseline security                  | Accepted; implemented locally                               |
 
 ## ADR-001: pnpm workspace
 
@@ -78,3 +79,11 @@ Keep decision IDs stable. Add a new entry when a choice changes a package bounda
 **Decision:** use reviewed forward migrations, database-generated UUID defaults, UTC-aware timestamps, protected Player identities and append-only audit events. Player lifecycle events share the business transaction. Audit actor/entity IDs are historical snapshots; future owned entities use indexed, restrictive Player foreign keys. Seeds create deterministic fixtures only in disposable local databases.
 
 **Consequences:** migration owners remain trusted DDL administrators. Audit corrections append events; destructive down-migrations are not the recovery mechanism. The 00.08 migration, ownership/seed tests and recovery plan exist locally; its hosted backup/deployment is still pending explicit approval. See [database foundations](DATABASE.md).
+
+## ADR-009: monitoring and baseline security
+
+**Context:** operators need request correlation and failure signals without forwarding credentials or arbitrary request data to logs/collectors.
+
+**Decision:** generate request UUIDs on the API, log allowlisted JSON metadata, expose replaceable safe server/browser reporting hooks, and fail closed on fatal process errors. Apply independent API/Auth-verification budgets using per-process memory stores, explicit proxy-CIDR trust, Helmet and a body-size cap. Scan dependencies in CI and on a weekly schedule; review targeted security overrides with Prisma/lint/migration checks.
+
+**Consequences:** original exceptions/stacks are omitted from reporting payloads, so root-cause diagnostics require deliberately designed safe fields. Memory limits reset on restart and need an edge/shared store before multiple replicas. Provider password-login limits, collector/alert configuration and actual hosted backup policy remain operator deployment responsibilities. The [security guide](SECURITY.md) defines those boundaries and the recovery plan.

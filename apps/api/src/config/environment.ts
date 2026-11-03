@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { databaseSettingsSchema } from './database-environment.js';
+import { securitySettingsSchema } from './security-environment.js';
 import {
   adminOnlyEnvironmentKeys,
   environmentModeSchema,
@@ -30,6 +31,7 @@ const schema = z
     ),
   })
   .extend(databaseSettingsSchema.shape)
+  .extend(securitySettingsSchema.shape)
   .superRefine((value, context) => {
     if (Boolean(value.SUPABASE_URL) !== Boolean(value.SUPABASE_PUBLISHABLE_KEY)) {
       context.addIssue({

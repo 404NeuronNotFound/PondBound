@@ -70,6 +70,8 @@ Inspect the reported process in the OS process viewer or with `Get-Process -Id <
 
 ## Verify a fix and hand it off
 
+For request failures, retain the API's `X-Request-Id` or error-body `requestId` and correlate it with `request.completed`/`error.reported` JSON records. A 429 includes `Retry-After`; wait for that budget to reopen rather than retrying in a loop. Diagnose missing/spoofed client IP separation through the explicit proxy configuration. `startup.failed` and `process.failed` require correcting the fault and restarting through the supervisor. Hook failures/overload, advisory scans, collector setup and the backup/restore plan are covered in [monitoring and security](SECURITY.md).
+
 Run the smallest check that reproduces the issue, then the relevant [quality checks](CODE_QUALITY.md). For code changes, `pnpm check` covers formatting, lint, types, ordinary tests, build and secret boundaries. Add the disposable database suite for schema/permission changes. For documentation-only changes, check formatting, commands against package scripts and repository links; application/database tests need no rerun solely for prose.
 
 Record the source revision, Node/pnpm versions, selected environment mode, command/route, HTTP status and sanitized error field names. Include expected versus observed behavior. Remove credentials, tokens, full connection strings and personal account data from logs/screenshots. Label mocked tests, actual browser checks and live-provider checks accurately. Hand off unresolved deployment dependencies explicitly; retain recovery points and audit history until a verified rollout is complete.

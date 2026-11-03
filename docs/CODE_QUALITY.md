@@ -30,6 +30,8 @@ The separate database suite requires `TEST_DB_ADMIN_URL` pointing to an isolated
 
 ## Pull-request CI
 
+`pnpm security:audit` scans the full dependency graph and fails for high/critical advisories or registry errors. CI runs it after frozen installation, separately from the network-independent `pnpm check`. The same workflow is scheduled weekly after publication. See [dependency policy](SECURITY.md) for targeted security overrides and review requirements.
+
 [The workflow](../.github/workflows/ci.yml) runs on pull requests, pushes and manual dispatch. It pins action revisions, grants read-only repository access and cancels superseded runs for the same ref. Each job installs the frozen lockfile, runs `pnpm check`, validates Prisma and tests migration/permissions against a fresh PostgreSQL 17 service. It uses disposable fixture credentials and a random harmless server-only build canary; no Supabase secrets are required.
 
 `main` is protected by a required `verify` status check bound to the GitHub Actions app. Pull requests must pass that check against an up-to-date base before merging; enforcement includes repository administrators. Direct pushes cannot bypass this requirement. No external review approval is required for this solo repository. Branch protection is a repository setting, separate from the workflow file, and must be configured again if the repository is recreated.

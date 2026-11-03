@@ -1,14 +1,10 @@
 import { Component } from 'react';
-import type { ErrorInfo, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 export class ErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
   override state = { failed: false };
   static getDerivedStateFromError() {
     return { failed: true };
-  }
-  override componentDidCatch(error: Error, info: ErrorInfo) {
-    if (import.meta.env.DEV)
-      console.error('Pondbound could not render this view.', error, info.componentStack);
   }
   override render() {
     if (this.state.failed) {

@@ -21,6 +21,8 @@
     "test:database": "pnpm --filter @pondbound/api test:database",
     "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm check:secrets",
     "check:secrets": "node scripts/check-secrets.mjs",
+    "security:audit": "pnpm audit --audit-level high",
+    "security:audit:prod": "pnpm audit --prod --audit-level high",
     "db:generate": "pnpm --filter @pondbound/api db:generate",
     "db:validate": "pnpm --filter @pondbound/api db:validate",
     "db:migrate": "pnpm --filter @pondbound/api db:migrate",

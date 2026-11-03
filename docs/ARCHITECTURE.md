@@ -26,7 +26,22 @@ Prisma connects NestJS to Supabase PostgreSQL through one bounded `pg.Pool` per 
 
 The private schema defines Player identity and, in the locally verified 00.08 migration, append-only AuditEvent history. Player ownership uses an internal UUID; audit IDs are historical snapshots. There are no Gold or gameplay inventory fields. Introduce economic models and transactional operations in their corresponding phases. The hosted 00.08 rollout remains pending; see [database foundations](DATABASE.md).
 
-## Health and credentials
+## Request monitoring and security
+
+`ObservabilityModule` supplies structured JSON logging, request correlation and the replaceable safe error-reporting hook. `SecurityModule` supplies independent API and Auth-verification rate stores. Request correlation/header middleware runs before CORS, body parsing and handlers; rate/proxy settings are validated at startup. Public probes bypass the API budget. See [monitoring and security](SECURITY.md) for field privacy, process-failure behavior, per-process limits and production dependencies.
+
+```mermaid
+flowchart LR
+  A[Request ID and completion log] --> B[Headers and CORS]
+  B --> C[API budget and body size cap]
+  C --> D{Protected route?}
+  D -- Yes --> E[Auth budget and token verification]
+  D -- No --> F[Controller and DTO validation]
+  E --> F
+  F --> G[Response or safe error report]
+```
+
+## Environment and credentials
 
 Mode-specific loaders isolate development, test and production. The API validates startup inputs before creating the server and rejects administrative credentials in its runtime. The browser explicitly receives only validated public configuration. CORS compares exact allowed origins and returns 403 for unlisted requests/preflights. See [configuration and secret management](CONFIGURATION.md).
 

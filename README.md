@@ -62,6 +62,7 @@ See [code quality and tests](docs/CODE_QUALITY.md) for formatting commands, test
 - [Game-config conventions](docs/GAME_CONFIG.md): public presentation settings and change workflow.
 - [Coding rules](CONTRIBUTING.md): implementation, security, tests and pull-request expectations.
 - [Environment runbook](docs/RUNBOOK.md): environment checklist, probes and troubleshooting.
+- [Monitoring and security](docs/SECURITY.md): request IDs, safe logs/reports, rate limits, dependency scans and recovery plan.
 - [Documentation index](docs/README.md): API, Auth, database, infrastructure and verification guides.
 
 The 00.08 database migration is verified locally; its hosted backup/deployment remains pending approval. Frontend/API production hosting and the playable world are later work. See [Phase 0 status](docs/PHASE_0.md).

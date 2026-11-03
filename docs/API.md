@@ -44,6 +44,8 @@ The global exception filter returns this JSON shape for HTTP exceptions, invalid
 
 Intentional client errors retain their message or validation messages. Server exceptions return a generic HTTP reason phrase and never expose the exception message, stack, or arbitrary response properties. Unknown-route messages are generic, and error paths omit query strings. A final adapter fallback handles unknown paths outside the global `/api` prefix with the same format.
 
+Responses include a server-generated `X-Request-Id`; error bodies also include `requestId`. API/protected-route rate limits return JSON 429 with `Retry-After`, and bodies over 16 KiB return JSON 413. Baseline headers, safe log/report fields, trusted-proxy settings and provider Auth limits are described in [monitoring and security](SECURITY.md).
+
 The shared package defines runtime schemas and TypeScript types for liveness, readiness, API identity, Player profiles and exception responses. Gameplay endpoints are implemented in later phases.
 
 ## Authentication and identity

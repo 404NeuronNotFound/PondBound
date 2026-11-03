@@ -7,6 +7,7 @@
 - [Game-config conventions](GAME_CONFIG.md): public exports, units, consumers and change verification.
 - [Coding rules](../CONTRIBUTING.md): conventions, security boundaries and review expectations.
 - [Environment runbook](RUNBOOK.md): environment checklist, troubleshooting and handoff steps.
+- [Monitoring and security](SECURITY.md): structured logs, reporting hooks, request IDs, rate limits, advisory scans and recovery planning.
 - [API foundation](API.md): probes, versioning, validation, exception responses and HTTP tests.
 - [Authentication](AUTHENTICATION.md): token verification, Player mapping and account sign-in.
 - [Configuration and secrets](CONFIGURATION.md): mode isolation, validation, CORS and credential rotation.

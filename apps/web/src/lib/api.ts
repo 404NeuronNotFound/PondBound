@@ -9,7 +9,10 @@ export async function getHealth(signal?: AbortSignal) {
 }
 
 export class ApiRequestError extends Error {
-  constructor(public readonly status: number) {
+  constructor(
+    public readonly status: number,
+    public readonly requestId?: string,
+  ) {
     super('The request could not be completed.');
   }
 }
@@ -22,6 +25,13 @@ export async function initializePlayer(accessToken: string, signal?: AbortSignal
     headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
     body: '{}',
   });
-  if (!response.ok) throw new ApiRequestError(response.status);
+  if (!response.ok) {
+    const candidate = response.headers.get('x-request-id');
+    const requestId =
+      candidate && /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i.test(candidate)
+        ? candidate
+        : undefined;
+    throw new ApiRequestError(response.status, requestId);
+  }
   return playerProfileResponseSchema.parse(await response.json()).player;
 }

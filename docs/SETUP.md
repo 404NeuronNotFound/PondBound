@@ -83,6 +83,8 @@ The 00.08 forward migration is tested locally but has not been applied to the ho
 | `pnpm test:database`                | Run integration tests against explicit disposable local PostgreSQL                   |
 | `pnpm check`                        | Format check, lint, typecheck, test, build and secret-boundary checks                |
 | `pnpm check:secrets`                | Check source/browser credential boundaries after building                            |
+| `pnpm security:audit`               | Scan all dependencies; high/critical advisories or registry errors fail              |
+| `pnpm security:audit:prod`          | Scan the production dependency graph                                                 |
 | `pnpm db:generate`                  | Generate Prisma client without a live database                                       |
 | `pnpm db:validate`                  | Validate Prisma schema/configuration                                                 |
 | `pnpm db:bootstrap`                 | Provision roles/schema and local role credentials using the administrator connection |

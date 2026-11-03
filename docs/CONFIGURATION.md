@@ -32,6 +32,8 @@ Production requires explicit `DATABASE_URL`, `SUPABASE_URL`, `SUPABASE_PUBLISHAB
 
 The API runtime rejects migration/admin credentials: `DIRECT_URL`, `SHADOW_DATABASE_URL`, `SUPABASE_DB_ADMIN_URL`, server secret/service-role keys and bootstrap role-password variables. `TEST_DB_ADMIN_URL` is also forbidden in production. Supply these only to their separate jobs/scripts. Development may omit database/Auth settings, leaving those services unavailable; configured Auth requires both public URL and public key together.
 
+API rate/proxy settings also have validated defaults: `API_RATE_LIMIT=120`, `AUTH_RATE_LIMIT=30`, `RATE_LIMIT_WINDOW_MS=60000`, and blank `TRUSTED_PROXY_CIDRS`. These are server-only. See [monitoring and security](SECURITY.md) before configuring trusted proxy addresses or deploying multiple replicas.
+
 ## Browser configuration
 
 Only these validated fields are defined into the browser bundle:
