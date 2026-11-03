@@ -1,4 +1,4 @@
-import { healthResponseSchema } from '@pondbound/contracts';
+import { healthResponseSchema } from '@pondbound/shared';
 
 export async function getHealth(signal?: AbortSignal) {
   const base = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '');

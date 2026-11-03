@@ -13,7 +13,7 @@ Prisma connects NestJS to PostgreSQL using the PostgreSQL driver adapter. Supaba
 - `apps/web/src/features` contains domain UI; `components`, `hooks`, `lib`, `stores`, and `styles` hold shared concerns.
 - `apps/web/src/game` contains Phaser scenes and engine lifecycle code.
 - `apps/api/src/modules` reserves feature modules; `config`, `database`, `health`, and `common` hold server infrastructure.
-- `packages/contracts` contains runtime API schemas and inferred types, avoiding duplicate type packages.
+- `packages/shared` contains runtime API schemas and inferred types, avoiding duplicate type packages.
 - `packages/game-config` currently contains presentation settings only. Never put secrets or authoritative hidden probabilities in a browser-imported package.
 - `packages/typescript-config` holds compiler defaults; lint rules live at the root until multiple distinct configurations are needed.
 

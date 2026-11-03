@@ -2,9 +2,20 @@
 
 ## Local apps
 
-Install Node.js 24 and pnpm 12.9.1, then run `pnpm install` and `pnpm dev` from the repository root. The dev scripts build shared packages before starting the apps. Restart development after changing shared package source, or run that package's `dev` watch script separately.
+Install Node.js 24 and pnpm 12.9.1, then run these commands:
 
-Copy `apps/api/.env.example` to `apps/api/.env`, and `apps/web/.env.example` to `apps/web/.env` when adding configuration. These copies are optional for the credential-free preview.
+```sh
+git clone https://github.com/404NeuronNotFound/PondBound.git
+cd PondBound
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+The root development command builds `packages/shared` and `packages/game-config` once before starting both apps in parallel. No previous `dist` directories, generated Prisma client or `.env` files are required. Frontend: http://localhost:5173. Backend: http://localhost:3000/api/health. The frontend also proxies `/api/health` to the backend. Stop both processes with Ctrl+C.
+
+Restart development after changing shared package source, or run that package's `dev` watch script separately. Ports 5173 and 3000 must be available. Vite deliberately fails if port 5173 is occupied.
+
+Run `pnpm env:setup` to copy the API and web `.env.example` files to app-local `.env` files without overwriting existing settings. These copies are optional for the credential-free preview. Never commit populated `.env` files.
 
 The API binds to loopback by default. Set `PORT` to change its port and adjust the Vite proxy if needed. `WEB_ORIGIN` is a comma-separated list of exact frontend origins. The browser's `VITE_API_URL` is the API origin without `/api`; leave it empty for the development proxy. Configure it for independently hosted production apps.
 
@@ -27,6 +38,7 @@ No cloud resources, storage buckets, auth policies, migrations, or secrets are p
 | Command | Purpose |
 | --- | --- |
 | `pnpm dev` | Start frontend and API |
+| `pnpm env:setup` | Copy missing environment templates without overwriting settings |
 | `pnpm build` | Generate Prisma client and build packages/apps in dependency order |
 | `pnpm typecheck` | Check TypeScript |
 | `pnpm lint` | Check code conventions |
@@ -35,4 +47,4 @@ No cloud resources, storage buckets, auth policies, migrations, or secrets are p
 | `pnpm db:generate` | Generate Prisma client without a live database |
 | `pnpm db:validate` | Validate Prisma schema/configuration |
 
-The generated Prisma client and build outputs are ignored. `pnpm install` plus `pnpm build` reconstructs them. In PowerShell environments that restrict `.ps1` wrappers, use `pnpm.cmd`.
+The generated Prisma client and build outputs are ignored. `pnpm install --frozen-lockfile` plus `pnpm build` reconstructs them. In PowerShell environments that restrict `.ps1` wrappers, use `pnpm.cmd` for every pnpm command. Windows uses the same root commands as macOS and Linux.

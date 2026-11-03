@@ -1,5 +1,5 @@
 import { Controller, Get, Inject, ServiceUnavailableException } from '@nestjs/common';
-import type { HealthResponse } from '@pondbound/contracts';
+import type { HealthResponse } from '@pondbound/shared';
 import { DatabaseService } from '../database/database.service.js';
 
 @Controller('health')

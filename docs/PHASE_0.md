@@ -18,6 +18,23 @@ Establish the monorepo and runnable stack before Phase 1 world development. Pres
 
 A real Supabase PostgreSQL connection must be configured and verified before Phase 0 is fully complete. No database credentials were supplied, so cloud setup and the first applied migration remain pending. The preview is an engine integration check; it is not a playable world.
 
+## 00.01 — Monorepo and workspace setup
+
+Required workspaces: `apps/web`, `apps/api`, `packages/shared`, and `packages/game-config`. `packages/typescript-config` supplies the common compiler settings. The shared package was renamed from `contracts` to match the roadmap; both apps now import `@pondbound/shared`.
+
+Root scripts provide `dev`, `build`, `lint`, `typecheck`, and `test`. The development command builds shared dependencies once before starting both apps. Installation uses the committed lockfile. Node 24 is recorded in `.node-version`; pnpm 12.9.1 is recorded in `packageManager`. `.gitattributes` keeps source line endings consistent.
+
+Acceptance passed on November 3, 2026, on Windows with Node 24.19.0 and pnpm 12.9.1. A temporary local Git snapshot of the updated source was cloned with `git clone --no-local` into an ignored verification directory. This tested the current local changes; it did not modify the GitHub repository.
+
+- The clone had no `node_modules`, app `.env` files, `dist` directories or generated Prisma client.
+- `pnpm install --frozen-lockfile` succeeded without changing the lockfile.
+- `pnpm dev` built the shared packages, generated Prisma, and started Vite and NestJS without a prior build.
+- Frontend and transformed shared-module requests returned HTTP 200. Both the direct API health request and the Vite API proxy returned the expected healthy response.
+- `pnpm check` passed lint, type checking, both backend integration tests, and all production builds in the clone.
+- `pnpm env:setup` created missing environment files; a second run preserved their hashes. The clone's Git working tree remained clean after all checks.
+
+This verifies 00.01's install-and-run criterion. It does not complete the later authentication, database provisioning or infrastructure work within Phase 00.
+
 ## Verification — November 3, 2026
 
 - `pnpm install`: passed; generated `pnpm-lock.yaml`.
