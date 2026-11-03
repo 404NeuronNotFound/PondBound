@@ -1,5 +1,7 @@
 # Architecture
 
+The [decision log](DECISIONS.md) records why these boundaries exist. Follow [coding rules](../CONTRIBUTING.md), [game-config conventions](GAME_CONFIG.md) and the [environment runbook](RUNBOOK.md) when extending them.
+
 ## Responsibilities
 
 React owns the application interface. React Router supplies home (`/`), pond preview (`/play`), account (`/account`), and a catch-all 404. `AppShell` keeps navigation and server status mounted between pages. Page modules load lazily with a Suspense loading state and an error boundary that resets on navigation. A separate outer boundary protects the shell itself.
@@ -22,7 +24,7 @@ Prisma connects NestJS to Supabase PostgreSQL through one bounded `pg.Pool` per 
 - `packages/game-config` currently contains presentation settings only. Never put secrets or authoritative hidden probabilities in a browser-imported package.
 - `packages/typescript-config` holds compiler defaults; lint rules live at the root until multiple distinct configurations are needed.
 
-The initial private database schema reserves player identity only. It has no Gold or gameplay inventory fields. Introduce economic models and transactional operations in the corresponding phases.
+The private schema defines Player identity and, in the locally verified 00.08 migration, append-only AuditEvent history. Player ownership uses an internal UUID; audit IDs are historical snapshots. There are no Gold or gameplay inventory fields. Introduce economic models and transactional operations in their corresponding phases. The hosted 00.08 rollout remains pending; see [database foundations](DATABASE.md).
 
 ## Health and credentials
 

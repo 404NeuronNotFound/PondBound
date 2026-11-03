@@ -3,6 +3,10 @@
 - [Whitepaper](../WHITEPAPER.md): design and development phases.
 - [Setup](SETUP.md): local commands and Supabase configuration.
 - [Architecture](ARCHITECTURE.md): responsibilities, security boundaries, folder ownership.
+- [Architecture decision log](DECISIONS.md): accepted choices, consequences and rollout status.
+- [Game-config conventions](GAME_CONFIG.md): public exports, units, consumers and change verification.
+- [Coding rules](../CONTRIBUTING.md): conventions, security boundaries and review expectations.
+- [Environment runbook](RUNBOOK.md): environment checklist, troubleshooting and handoff steps.
 - [API foundation](API.md): probes, versioning, validation, exception responses and HTTP tests.
 - [Authentication](AUTHENTICATION.md): token verification, Player mapping and account sign-in.
 - [Configuration and secrets](CONFIGURATION.md): mode isolation, validation, CORS and credential rotation.

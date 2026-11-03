@@ -4,7 +4,7 @@ A cozy fishing adventure. Phase 0 establishes the development stack; gameplay fo
 
 ## Quick start
 
-Use Node.js 24 and pnpm 12.9.1. Start from a fresh clone:
+Use Node.js 24, Git and pnpm 12.9.1; see [tool installation](docs/SETUP.md#prerequisites) if needed. Start from a fresh clone:
 
 ```sh
 git clone https://github.com/404NeuronNotFound/PondBound.git
@@ -34,7 +34,7 @@ apps/
   web/              React, Vite, Tailwind, Phaser 3
   api/              NestJS, validation, Prisma and health endpoints
 packages/
-  shared/        Shared Zod schemas and API types
+  shared/           Shared Zod schemas and API types
   game-config/      Shared presentation settings
   typescript-config/ Shared compiler defaults
 art/                Editable pixel-art sources by asset category
@@ -54,3 +54,14 @@ Use TypeScript and feature modules. Put shared API schemas in `packages/shared`;
 Use short feature branches and review changes before merging. Keep `pnpm-lock.yaml` committed so a fresh clone uses the same dependency versions.
 
 See [code quality and tests](docs/CODE_QUALITY.md) for formatting commands, test suites, pull-request CI and optional pre-commit hooks.
+
+## Documentation
+
+- [Setup](docs/SETUP.md): install, start, verify and connect the development environment.
+- [Architecture](docs/ARCHITECTURE.md) and [decision log](docs/DECISIONS.md): system boundaries and their rationale.
+- [Game-config conventions](docs/GAME_CONFIG.md): public presentation settings and change workflow.
+- [Coding rules](CONTRIBUTING.md): implementation, security, tests and pull-request expectations.
+- [Environment runbook](docs/RUNBOOK.md): environment checklist, probes and troubleshooting.
+- [Documentation index](docs/README.md): API, Auth, database, infrastructure and verification guides.
+
+The 00.08 database migration is verified locally; its hosted backup/deployment remains pending approval. Frontend/API production hosting and the playable world are later work. See [Phase 0 status](docs/PHASE_0.md).

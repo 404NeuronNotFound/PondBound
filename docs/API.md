@@ -26,7 +26,7 @@ An unconfigured database does not stop local API or frontend development. Readin
 
 ## Modules and request handling
 
-`AppModule` composes `HealthModule` and the API identity controller. `HealthModule` imports `DatabaseModule`, which owns and exports `DatabaseService`. Feature modules belong under `src/modules` and must be registered explicitly. `configureApp` is shared by the real server and HTTP test applications.
+`AppModule` composes Auth, Player and health modules plus the API identity controller. Player/health modules share `DatabaseModule`, which owns and exports `DatabaseService`. Feature modules belong under `src/modules` and must be registered explicitly. `configureApp` is shared by the real server and HTTP test applications.
 
 Global validation uses DTO classes with class-validator decorators. It transforms plain request bodies into DTO instances, rejects undeclared properties, and rejects unknown values. It does not enable implicit scalar coercion; add explicit conversion decorators or parameter pipes when needed. Validation responses exclude DTO targets and submitted values.
 
