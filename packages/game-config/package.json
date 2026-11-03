@@ -1,0 +1,6 @@
+{
+  "name": "@pondbound/game-config", "private": true, "version": "0.1.0", "type": "module",
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "scripts": { "build": "tsc -p tsconfig.json", "typecheck": "tsc -p tsconfig.json --noEmit", "dev": "tsc -p tsconfig.json --watch" },
+  "devDependencies": { "@pondbound/typescript-config": "workspace:*", "typescript": "~6.0.2" }
+}

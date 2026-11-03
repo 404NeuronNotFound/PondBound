@@ -1,0 +1,17 @@
+{
+  "name": "pondbound", "private": true, "version": "0.1.0",
+  "packageManager": "pnpm@12.9.1", "engines": { "node": "24.x" },
+  "scripts": {
+    "dev": "pnpm --parallel --filter @pondbound/web --filter @pondbound/api dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm --filter @pondbound/contracts --filter @pondbound/game-config build && pnpm -r typecheck",
+    "lint": "eslint apps packages --max-warnings=0",
+    "test": "pnpm --filter @pondbound/contracts build && pnpm --filter @pondbound/api test",
+    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
+    "db:generate": "pnpm --filter @pondbound/api db:generate",
+    "db:validate": "pnpm --filter @pondbound/api db:validate",
+    "db:migrate": "pnpm --filter @pondbound/api db:migrate",
+    "db:deploy": "pnpm --filter @pondbound/api db:deploy"
+  },
+  "devDependencies": { "eslint": "^10.10.0", "typescript-eslint": "^8.69.0", "typescript": "~6.0.2" }
+}

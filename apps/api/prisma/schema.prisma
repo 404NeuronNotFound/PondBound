@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  schemas  = ["game"]
+}
+
+// Private application schema: deliberately outside Supabase's default public API schema.
+// Gameplay models are introduced with their development phases.
+model Player {
+  id        String   @id @default(uuid()) @db.Uuid
+  authId    String   @unique @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@schema("game")
+}
