@@ -5,5 +5,10 @@ export default defineConfig({
   envDir: false,
   envPrefix: [],
   plugins: [react()],
-  test: { environment: 'jsdom', setupFiles: ['./test/setup.ts'], restoreMocks: true, clearMocks: true },
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./test/setup.ts'],
+    restoreMocks: true,
+    clearMocks: true,
+  },
 });

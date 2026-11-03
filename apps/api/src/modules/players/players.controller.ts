@@ -10,12 +10,20 @@ export class PlayersController {
   @Post('me')
   @HttpCode(200)
   initialize(@CurrentIdentity() identity: VerifiedIdentity, @Body() body: unknown) {
-    if (body !== undefined && (body === null || typeof body !== 'object' || Array.isArray(body) || Object.keys(body).length > 0)) {
+    if (
+      body !== undefined &&
+      (body === null ||
+        typeof body !== 'object' ||
+        Array.isArray(body) ||
+        Object.keys(body).length > 0)
+    ) {
       throw new BadRequestException('Profile initialization accepts no fields');
     }
     return this.players.initialize(identity.id);
   }
 
   @Get('me')
-  current(@CurrentIdentity() identity: VerifiedIdentity) { return this.players.current(identity.id); }
+  current(@CurrentIdentity() identity: VerifiedIdentity) {
+    return this.players.current(identity.id);
+  }
 }

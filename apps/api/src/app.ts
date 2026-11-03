@@ -11,10 +11,15 @@ export function configureApp(app: INestApplication) {
   app.setGlobalPrefix('api', { exclude: ['health', 'ready', 'api/health', 'api/health/ready'] });
   app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
   app.enableCors(createCorsOptions(environment.WEB_ORIGIN));
-  app.useGlobalPipes(new ValidationPipe({
-    whitelist: true, forbidNonWhitelisted: true, forbidUnknownValues: true,
-    transform: true, validationError: { target: false, value: false },
-  }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      forbidUnknownValues: true,
+      transform: true,
+      validationError: { target: false, value: false },
+    }),
+  );
   app.enableShutdownHooks();
   return app;
 }

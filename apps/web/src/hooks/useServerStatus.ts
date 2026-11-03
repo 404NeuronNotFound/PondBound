@@ -9,8 +9,12 @@ export function useServerStatus() {
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), 5000);
     void getHealth(controller.signal)
-      .then(() => { if (!disposed) setStatus('connected'); })
-      .catch(() => { if (!disposed) setStatus('offline'); })
+      .then(() => {
+        if (!disposed) setStatus('connected');
+      })
+      .catch(() => {
+        if (!disposed) setStatus('offline');
+      })
       .finally(() => window.clearTimeout(timeout));
     return () => {
       disposed = true;
@@ -18,5 +22,11 @@ export function useServerStatus() {
       controller.abort();
     };
   }, [attempt]);
-  return { status, reconnect: () => { setStatus('connecting'); setAttempt(value => value + 1); } };
+  return {
+    status,
+    reconnect: () => {
+      setStatus('connecting');
+      setAttempt((value) => value + 1);
+    },
+  };
 }

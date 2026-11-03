@@ -13,9 +13,11 @@ export class ApiExceptionFilter implements ExceptionFilter, OnApplicationBootstr
   onApplicationBootstrap() {
     // Nest scopes its default 404 handler to the API prefix. Add a final fallback
     // after route registration so paths outside that prefix also receive JSON.
-    this.adapterHost.httpAdapter.setNotFoundHandler((request: RequestContext, response: unknown) => {
-      this.reply(new NotFoundException(), request, response);
-    });
+    this.adapterHost.httpAdapter.setNotFoundHandler(
+      (request: RequestContext, response: unknown) => {
+        this.reply(new NotFoundException(), request, response);
+      },
+    );
   }
 
   catch(exception: unknown, host: ArgumentsHost) {
@@ -34,7 +36,11 @@ export class ApiExceptionFilter implements ExceptionFilter, OnApplicationBootstr
       if (typeof payload === 'string') message = payload;
       else if ('message' in payload) {
         const candidate: unknown = payload.message;
-        if (typeof candidate === 'string' || (Array.isArray(candidate) && candidate.every(value => typeof value === 'string'))) message = candidate;
+        if (
+          typeof candidate === 'string' ||
+          (Array.isArray(candidate) && candidate.every((value) => typeof value === 'string'))
+        )
+          message = candidate;
       }
     }
 
@@ -42,7 +48,13 @@ export class ApiExceptionFilter implements ExceptionFilter, OnApplicationBootstr
     if (statusCode >= 500) {
       this.logger.error({ message: 'Request failed', method: request.method, path });
     }
-    const body: ApiErrorResponse = { statusCode, error, message, path, timestamp: new Date().toISOString() };
+    const body: ApiErrorResponse = {
+      statusCode,
+      error,
+      message,
+      path,
+      timestamp: new Date().toISOString(),
+    };
     this.adapterHost.httpAdapter.reply(response, body, statusCode);
   }
 }

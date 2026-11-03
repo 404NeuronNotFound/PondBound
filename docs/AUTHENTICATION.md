@@ -6,10 +6,10 @@ Supabase Auth is Pondbound's identity provider. Passwords go directly from the b
 
 The API needs `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` together in its selected runtime environment. The browser uses their `VITE_` equivalents for the selected build mode. Development uses `.env`; test/production do not inherit it. Request-time verification uses the public key, no service-role key. The server Auth client has no persisted session and a five-second network timeout. Remote Auth URLs require HTTPS. See [configuration](CONFIGURATION.md).
 
-| Method | Route | Behavior |
-| --- | --- | --- |
-| POST | `/api/v1/players/me` | Initialize/reuse the verified caller's profile; send `{}` |
-| GET | `/api/v1/players/me` | Return the verified caller's existing profile, or 404 |
+| Method | Route                | Behavior                                                  |
+| ------ | -------------------- | --------------------------------------------------------- |
+| POST   | `/api/v1/players/me` | Initialize/reuse the verified caller's profile; send `{}` |
+| GET    | `/api/v1/players/me` | Return the verified caller's existing profile, or 404     |
 
 Responses contain `{ player: { id, authId, createdAt, updatedAt } }`, with ISO dates. No identity or role fields are accepted in initialization requests; extra body fields return 400. Query parameters cannot select another profile.
 

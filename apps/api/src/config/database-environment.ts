@@ -1,19 +1,32 @@
 import { z } from 'zod';
 
-const optional = <T extends z.ZodType>(schema: T) => z.preprocess(value => value === '' ? undefined : value, schema.optional());
+const optional = <T extends z.ZodType>(schema: T) =>
+  z.preprocess((value) => (value === '' ? undefined : value), schema.optional());
 export const runtimeDatabaseUrl = z.url().superRefine((value, context) => {
   const url = new URL(value);
   if (!['postgres:', 'postgresql:'].includes(url.protocol)) {
     context.addIssue({ code: 'custom', message: 'Use a PostgreSQL URL' });
   }
   let role = '';
-  try { role = decodeURIComponent(url.username).split('.')[0] ?? ''; } catch { /* Invalid escaping is rejected below. */ }
-  if (role !== 'pondbound_api') {
-    context.addIssue({ code: 'custom', message: 'The runtime must use the pondbound_api database role' });
+  try {
+    role = decodeURIComponent(url.username).split('.')[0] ?? '';
+  } catch {
+    /* Invalid escaping is rejected below. */
   }
-  if (!['localhost', '127.0.0.1', '[::1]'].includes(url.hostname)
-    && ['disable', 'allow', 'prefer', 'no-verify'].includes(url.searchParams.get('sslmode') ?? '')) {
-    context.addIssue({ code: 'custom', message: 'Remote database connections require verified TLS' });
+  if (role !== 'pondbound_api') {
+    context.addIssue({
+      code: 'custom',
+      message: 'The runtime must use the pondbound_api database role',
+    });
+  }
+  if (
+    !['localhost', '127.0.0.1', '[::1]'].includes(url.hostname) &&
+    ['disable', 'allow', 'prefer', 'no-verify'].includes(url.searchParams.get('sslmode') ?? '')
+  ) {
+    context.addIssue({
+      code: 'custom',
+      message: 'Remote database connections require verified TLS',
+    });
   }
 });
 

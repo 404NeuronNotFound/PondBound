@@ -10,7 +10,9 @@ import { createPoolConfig } from './pool-config.js';
 export class DatabaseService implements OnModuleDestroy {
   private readonly logger = new Logger(DatabaseService.name);
   private readonly pool = environment.DATABASE_URL ? new Pool(createPoolConfig(environment)) : null;
-  private readonly client = this.pool ? new PrismaClient({ adapter: new PrismaPg(this.pool, { schema: 'game' }) }) : null;
+  private readonly client = this.pool
+    ? new PrismaClient({ adapter: new PrismaPg(this.pool, { schema: 'game' }) })
+    : null;
 
   constructor() {
     this.pool?.on('error', () => this.logger.warn('An idle database connection failed.'));
@@ -32,7 +34,10 @@ export class DatabaseService implements OnModuleDestroy {
     }
   }
   async onModuleDestroy() {
-    try { await this.client?.$disconnect(); }
-    finally { await this.pool?.end(); }
+    try {
+      await this.client?.$disconnect();
+    } finally {
+      await this.pool?.end();
+    }
   }
 }

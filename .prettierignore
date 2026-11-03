@@ -1,0 +1,13 @@
+node_modules/
+**/node_modules/
+**/dist/
+**/generated/
+**/coverage/
+artifacts/
+.git/
+**/.env
+**/.env.*
+pnpm-lock.yaml
+# User-provided reference and applied migrations must retain their original content.
+WHITEPAPER.md
+apps/api/prisma/migrations/

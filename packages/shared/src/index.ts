@@ -13,7 +13,10 @@ export const readinessResponseSchema = z.discriminatedUnion('status', [
 ]);
 export type ReadinessResponse = z.infer<typeof readinessResponseSchema>;
 
-export const apiInfoResponseSchema = z.object({ service: z.literal('pondbound-api'), apiVersion: z.literal('1') });
+export const apiInfoResponseSchema = z.object({
+  service: z.literal('pondbound-api'),
+  apiVersion: z.literal('1'),
+});
 export type ApiInfoResponse = z.infer<typeof apiInfoResponseSchema>;
 
 export const apiErrorResponseSchema = z.object({
@@ -29,7 +32,10 @@ export const verifiedIdentitySchema = z.object({ id: z.uuid() });
 export type VerifiedIdentity = z.infer<typeof verifiedIdentitySchema>;
 
 export const playerProfileSchema = z.object({
-  id: z.uuid(), authId: z.uuid(), createdAt: z.iso.datetime(), updatedAt: z.iso.datetime(),
+  id: z.uuid(),
+  authId: z.uuid(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export const playerProfileResponseSchema = z.object({ player: playerProfileSchema });
 export type PlayerProfile = z.infer<typeof playerProfileSchema>;

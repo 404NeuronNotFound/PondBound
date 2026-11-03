@@ -37,25 +37,30 @@ The existing PondBound Development project now has the initial migration, restri
 
 ## Commands
 
-| Command | Purpose |
-| --- | --- |
-| `pnpm dev` | Start frontend and API |
-| `pnpm env:setup` | Copy missing environment templates without overwriting settings |
-| `pnpm build` | Generate Prisma client and build packages/apps in dependency order |
-| `pnpm typecheck` | Check TypeScript |
-| `pnpm lint` | Check code conventions |
-| `pnpm test` | Build shared packages and run frontend and backend tests |
-| `pnpm --filter @pondbound/web test` | Run frontend routing, loading, recovery and lifecycle tests |
-| `pnpm check` | Lint, typecheck, test and production build |
-| `pnpm check:secrets` | Check source/browser credential boundaries after building |
-| `pnpm db:generate` | Generate Prisma client without a live database |
-| `pnpm db:validate` | Validate Prisma schema/configuration |
-| `pnpm db:bootstrap` | Provision roles/schema and local role credentials using the administrator connection |
-| `pnpm db:deploy` | Apply committed migrations using migration-only credentials |
-| `pnpm db:verify` | Check live runtime permissions and browser isolation |
-| `pnpm db:status` | Inspect applied migration status |
-| `pnpm storage:provision` | Create or verify the private Storage bucket |
-| `pnpm auth:verify` | Explicit live Auth/profile smoke test with temporary development users and cleanup |
+| Command                             | Purpose                                                                              |
+| ----------------------------------- | ------------------------------------------------------------------------------------ |
+| `pnpm dev`                          | Start frontend and API                                                               |
+| `pnpm env:setup`                    | Copy missing environment templates without overwriting settings                      |
+| `pnpm build`                        | Generate Prisma client and build packages/apps in dependency order                   |
+| `pnpm typecheck`                    | Check TypeScript                                                                     |
+| `pnpm lint`                         | Check code conventions                                                               |
+| `pnpm test`                         | Build shared packages and run frontend and backend tests                             |
+| `pnpm --filter @pondbound/web test` | Run frontend routing, loading, recovery and lifecycle tests                          |
+| `pnpm format`                       | Format source, configuration and documentation                                       |
+| `pnpm format:check`                 | Check formatting without changing files                                              |
+| `pnpm test:unit`                    | Run frontend tests and backend unit tests                                            |
+| `pnpm test:integration`             | Run backend HTTP integration tests                                                   |
+| `pnpm test:database`                | Run integration tests against explicit disposable local PostgreSQL                   |
+| `pnpm check`                        | Format check, lint, typecheck, test, build and secret-boundary checks                |
+| `pnpm check:secrets`                | Check source/browser credential boundaries after building                            |
+| `pnpm db:generate`                  | Generate Prisma client without a live database                                       |
+| `pnpm db:validate`                  | Validate Prisma schema/configuration                                                 |
+| `pnpm db:bootstrap`                 | Provision roles/schema and local role credentials using the administrator connection |
+| `pnpm db:deploy`                    | Apply committed migrations using migration-only credentials                          |
+| `pnpm db:verify`                    | Check live runtime permissions and browser isolation                                 |
+| `pnpm db:status`                    | Inspect applied migration status                                                     |
+| `pnpm storage:provision`            | Create or verify the private Storage bucket                                          |
+| `pnpm auth:verify`                  | Explicit live Auth/profile smoke test with temporary development users and cleanup   |
 
 The generated Prisma client and build outputs are ignored. `pnpm install --frozen-lockfile` plus `pnpm build` reconstructs them. In PowerShell environments that restrict `.ps1` wrappers, use `pnpm.cmd` for every pnpm command. Windows uses the same root commands as macOS and Linux.
 

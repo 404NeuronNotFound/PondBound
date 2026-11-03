@@ -4,11 +4,11 @@
 
 Select the API mode with `NODE_ENV` and the browser mode with Vite. Process values take precedence over files. File order is highest priority first:
 
-| Mode | Files |
-| --- | --- |
+| Mode        | Files                                                              |
+| ----------- | ------------------------------------------------------------------ |
 | Development | `.env.development.local`, `.env.development`, `.env.local`, `.env` |
-| Test | `.env.test.local`, `.env.test` |
-| Production | `.env.production.local`, `.env.production` |
+| Test        | `.env.test.local`, `.env.test`                                     |
+| Production  | `.env.production.local`, `.env.production`                         |
 
 Test/production never fall back to development files. The API selects its mode before loading files and rejects a conflicting `NODE_ENV` inside a file. API paths are relative to the package, independent of the shell working directory.
 

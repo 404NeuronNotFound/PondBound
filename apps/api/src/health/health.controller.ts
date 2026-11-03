@@ -9,13 +9,17 @@ import { Public } from '../modules/auth/public.decorator.js';
 export class HealthController {
   constructor(@Inject(DatabaseService) private readonly database: DatabaseService) {}
   @Get(['health', 'api/health'])
-  live(): HealthResponse { return { status: 'ok', service: 'pondbound-api' }; }
+  live(): HealthResponse {
+    return { status: 'ok', service: 'pondbound-api' };
+  }
 
   @Get(['ready', 'api/health/ready'])
   async ready(@Res({ passthrough: true }) response: Response): Promise<ReadinessResponse> {
     const database = await this.database.readiness();
     // A readiness result is an operational state, including when it is not ready.
     response.status(database === 'connected' ? 200 : 503);
-    return database === 'connected' ? { status: 'ok', database } : { status: 'not_ready', database };
+    return database === 'connected'
+      ? { status: 'ok', database }
+      : { status: 'not_ready', database };
   }
 }

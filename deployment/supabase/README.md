@@ -6,11 +6,11 @@ PondBound Development uses a dedicated Supabase PostgreSQL database and a privat
 
 Run `pnpm env:setup` from the repository root to create missing local configuration files. Existing files are preserved.
 
-| File | Purpose | Values |
-| --- | --- | --- |
-| `apps/web/.env` | Browser configuration | Project URL and publishable key only |
-| `apps/api/.env` | NestJS runtime | `DATABASE_URL` as `pondbound_api`, pool limits, CA path |
-| `apps/api/.env.migrations` | Prisma CLI | `DIRECT_URL` as `pondbound_migrator`, optional shadow URL |
+| File                       | Purpose                 | Values                                                                   |
+| -------------------------- | ----------------------- | ------------------------------------------------------------------------ |
+| `apps/web/.env`            | Browser configuration   | Project URL and publishable key only                                     |
+| `apps/api/.env`            | NestJS runtime          | `DATABASE_URL` as `pondbound_api`, pool limits, CA path                  |
+| `apps/api/.env.migrations` | Prisma CLI              | `DIRECT_URL` as `pondbound_migrator`, optional shadow URL                |
 | `deployment/supabase/.env` | One-time administration | Admin database URL, server secret key, generated role passwords, CA path |
 
 All populated environment files are ignored by Git. Only placeholder templates and the public CA certificate are committed. Provisioning credentials are not loaded by the API runtime, and migration commands never fall back to runtime credentials.

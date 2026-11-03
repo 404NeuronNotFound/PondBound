@@ -9,18 +9,34 @@ export function AppShell() {
   const content = useRef<HTMLElement>(null);
   useEffect(() => {
     const path = pathname.replace(/\/+$/, '') || '/';
-    const title = path === '/' ? 'A quiet beginning' : path === '/play' ? 'Pond preview' : path === '/account' ? 'Your account' : 'Page not found';
+    const title =
+      path === '/'
+        ? 'A quiet beginning'
+        : path === '/play'
+          ? 'Pond preview'
+          : path === '/account'
+            ? 'Your account'
+            : 'Page not found';
     document.title = `${title} · Pondbound`;
     content.current?.focus({ preventScroll: true });
   }, [pathname]);
 
   return (
     <div className="app-shell">
-      <a className="skip-link" href="#main-content">Skip to content</a>
+      <a className="skip-link" href="#main-content">
+        Skip to content
+      </a>
       <header className="site-header">
-        <Link to="/" className="wordmark" aria-label="Pondbound home">PONDBOUND<span className="wordmark-dot" aria-hidden="true">.</span></Link>
+        <Link to="/" className="wordmark" aria-label="Pondbound home">
+          PONDBOUND
+          <span className="wordmark-dot" aria-hidden="true">
+            .
+          </span>
+        </Link>
         <nav className="site-nav" aria-label="Main navigation">
-          <NavLink to="/" end>Home</NavLink>
+          <NavLink to="/" end>
+            Home
+          </NavLink>
           <NavLink to="/play">Pond preview</NavLink>
           <NavLink to="/account">Account</NavLink>
         </nav>

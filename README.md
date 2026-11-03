@@ -52,3 +52,5 @@ Feature directories are reserved for later phases and contain no implemented gam
 Use TypeScript and feature modules. Put shared API schemas in `packages/shared`; the server validates all authoritative actions. Keep secrets in ignored app-local `.env` files. Run `pnpm check` before reviewing a change. Update existing documentation when behavior changes.
 
 Use short feature branches and review changes before merging. Keep `pnpm-lock.yaml` committed so a fresh clone uses the same dependency versions.
+
+See [code quality and tests](docs/CODE_QUALITY.md) for formatting commands, test suites, pull-request CI and optional pre-commit hooks.

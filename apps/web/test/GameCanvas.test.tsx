@@ -24,8 +24,14 @@ it('keeps the loading state until the engine is ready and destroys it on unmount
 
 it('sends asynchronous engine startup failures to the error boundary', async () => {
   vi.spyOn(console, 'error').mockImplementation(() => {});
-  vi.mocked(createGame).mockImplementation(() => { throw new Error('Engine failed'); });
-  render(<ErrorBoundary><GameCanvas /></ErrorBoundary>);
+  vi.mocked(createGame).mockImplementation(() => {
+    throw new Error('Engine failed');
+  });
+  render(
+    <ErrorBoundary>
+      <GameCanvas />
+    </ErrorBoundary>,
+  );
   expect(await screen.findByRole('alert')).toHaveTextContent('We hit a snag.');
   expect(screen.queryByText('Engine failed')).not.toBeInTheDocument();
 });

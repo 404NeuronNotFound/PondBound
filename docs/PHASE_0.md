@@ -98,6 +98,16 @@ Browser builds explicitly expose only the three validated public variables. Unkn
 
 Verification passed 26 backend and 20 frontend tests, lint, typecheck, builds and secret checks. A production startup check failed before serving with missing config and no development fallback. Live CORS checks returned 200 for a listed origin and 403 for an unlisted origin. Mode setup preserved both development-file hashes. No production credentials were populated or rotated. See [configuration](CONFIGURATION.md).
 
+## 00.07 — CI, code quality and tests
+
+Added pinned Prettier formatting and an initial source/configuration formatting pass. ESLint now covers JavaScript utilities and tests as well as TypeScript, enforces React Hooks rules and fails on warnings. Shared compiler settings also reject unused declarations, missing overrides, incomplete returns and switch fallthrough. The stricter checks prompted a profile-retry render fix and safer live-test failure reporting.
+
+Backend test filenames and commands distinguish unit checks from HTTP integration tests; Vitest continues to run frontend component/unit tests. Real PostgreSQL tests remain an explicit separate suite. Pull-request/push CI now enforces formatting alongside lint, types, tests, builds, secret checks and clean-database migrations, with superseded-run cancellation. Optional pre-commit hook files are provided without changing local Git configuration.
+
+Verification on November 3, 2026: frozen installation, `pnpm check`, both targeted test commands and Prisma validation passed. Results were 20 frontend tests, 10 backend unit tests, 16 HTTP integration tests and 5 real PostgreSQL tests. The database suite ran with `CI=true` against a newly initialized PostgreSQL 17.11 cluster; the cluster was stopped and its generated password file removed. The original whitepaper hash and applied migration remained unchanged. GitHub-hosted workflow execution is pending a push. See [code quality and tests](CODE_QUALITY.md).
+
+00.07 acceptance follow-up on November 3, 2026: the local workflow installs with the frozen lockfile and runs lint, typecheck, tests and build through `pnpm check`; these commands passed in the implementation verification. The full acceptance criterion is not yet met on GitHub. Read-only GitHub API inspection found `main` unprotected, no active branch rules, zero registered workflows/runs, and no `.github/workflows/ci.yml` on remote `main`. Publish the workflow, obtain its hosted result, then require the `verify` job as a status check for merges into `main` using branch protection or an active ruleset. No GitHub settings were changed during this verification.
+
 ## Initial scaffold verification — November 3, 2026
 
 - `pnpm install`: passed; generated `pnpm-lock.yaml`.

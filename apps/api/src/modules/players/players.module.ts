@@ -3,5 +3,9 @@ import { DatabaseModule } from '../../database/database.module.js';
 import { PlayersService } from './players.service.js';
 import { PlayersController } from './players.controller.js';
 
-@Module({ imports: [DatabaseModule], controllers: [PlayersController], providers: [PlayersService] })
+@Module({
+  imports: [DatabaseModule],
+  controllers: [PlayersController],
+  providers: [PlayersService],
+})
 export class PlayersModule {}

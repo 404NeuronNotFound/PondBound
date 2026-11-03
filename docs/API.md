@@ -4,13 +4,13 @@ Base URL in development: `http://localhost:3000`. Start both apps with `pnpm dev
 
 ## Endpoints
 
-| Method | Path | Behavior |
-| --- | --- | --- |
-| GET | `/health` | API liveness; HTTP 200 while the process can serve requests |
-| GET | `/ready` | Database readiness; HTTP 200 after a successful Prisma `SELECT 1`, otherwise HTTP 503 |
-| GET | `/api/v1` | Versioned API identity: `service` and `apiVersion` |
-| GET | `/api/health` | Compatibility alias for `/health`, used by the frontend proxy |
-| GET | `/api/health/ready` | Compatibility alias for `/ready` |
+| Method | Path                | Behavior                                                                              |
+| ------ | ------------------- | ------------------------------------------------------------------------------------- |
+| GET    | `/health`           | API liveness; HTTP 200 while the process can serve requests                           |
+| GET    | `/ready`            | Database readiness; HTTP 200 after a successful Prisma `SELECT 1`, otherwise HTTP 503 |
+| GET    | `/api/v1`           | Versioned API identity: `service` and `apiVersion`                                    |
+| GET    | `/api/health`       | Compatibility alias for `/health`, used by the frontend proxy                         |
+| GET    | `/api/health/ready` | Compatibility alias for `/ready`                                                      |
 
 Application routes use URI versioning: `/api/v1/...`. New controllers inherit version 1 unless they declare a version explicitly. Unsupported or missing versions return HTTP 404. Health probes are version-neutral and stay outside the versioned namespace.
 
