@@ -25,6 +25,7 @@ export const apiErrorResponseSchema = z.object({
   message: z.union([z.string(), z.array(z.string())]),
   path: z.string(),
   timestamp: z.iso.datetime(),
+  requestId: z.uuid().optional(),
 });
 export type ApiErrorResponse = z.infer<typeof apiErrorResponseSchema>;
 

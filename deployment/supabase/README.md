@@ -40,6 +40,7 @@ Restart `pnpm dev` after configuring credentials. `GET http://localhost:3000/rea
 
 - `pondbound_migrator` owns the `game` schema and its application tables. It has no superuser, role-creation, database-creation, replication or bypass-RLS attribute. It can perform DDL inside `game`. The database administrator retains membership for management.
 - `pondbound_api` has no role memberships or elevated attributes. It has schema usage and explicit CRUD grants on `game.Player`, with a policy limited to this backend role. It cannot perform DDL or access `_prisma_migrations`.
+- `game.AuditEvent` permits backend SELECT/INSERT only, with RLS and immutable-event triggers. Player lifecycle events are transactional. See [database foundations](../../docs/DATABASE.md) for ownership, timestamp and audit conventions.
 - `anon`, `authenticated`, and `PUBLIC` receive no access to the private schema or its tables. Keep `game` out of Supabase's Data API exposed schemas. The live public-client check returned `PGRST106` for this schema.
 
 The migration role is a trusted table owner and can administer RLS; the runtime role is subject to it. This backend policy authorizes the server, not individual players. Future API handlers must authenticate users and validate ownership server-side. PostgreSQL's provider-managed default privileges outside `game` are preserved; provisioning does not revoke privileges from Supabase's managed services.
@@ -59,6 +60,8 @@ pnpm db:migrate --name descriptive_change
 Set `DIRECT_URL` and `SHADOW_DATABASE_URL` in `apps/api/.env.migrations`. The shadow database must be distinct from the application database; Prisma may reset it. The migration role must own the local shadow database or have CREATE privileges there so Prisma can reset its schema. Do not grant that privilege on the hosted application database. The bootstrap's role/schema setup must also be applied to the local databases before authoring migrations.
 
 Review generated SQL, include new grants/RLS, run checks, and commit the migration. Apply reviewed SQL to Supabase with `pnpm db:deploy`; inspect with `pnpm db:status`. Never edit an already-applied migration or use `db push`/migration resets on the hosted project. Generation and schema validation work without database credentials.
+
+The 00.08 forward migration adds database-generated UUIDs, UTC-aware timestamps, immutable Player identity and append-only audit events. `pnpm db:seed` is explicit and limited to disposable local databases; it refuses the hosted project. See the [seed strategy and migration policy](../../docs/DATABASE.md).
 
 ## Pooling and TLS
 

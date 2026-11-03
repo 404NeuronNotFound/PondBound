@@ -1,5 +1,7 @@
 # Architecture
 
+The [decision log](DECISIONS.md) records why these boundaries exist. Follow [coding rules](../CONTRIBUTING.md), [game-config conventions](GAME_CONFIG.md) and the [environment runbook](RUNBOOK.md) when extending them.
+
 ## Responsibilities
 
 React owns the application interface. React Router supplies home (`/`), pond preview (`/play`), account (`/account`), and a catch-all 404. `AppShell` keeps navigation and server status mounted between pages. Page modules load lazily with a Suspense loading state and an error boundary that resets on navigation. A separate outer boundary protects the shell itself.
@@ -22,9 +24,24 @@ Prisma connects NestJS to Supabase PostgreSQL through one bounded `pg.Pool` per 
 - `packages/game-config` currently contains presentation settings only. Never put secrets or authoritative hidden probabilities in a browser-imported package.
 - `packages/typescript-config` holds compiler defaults; lint rules live at the root until multiple distinct configurations are needed.
 
-The initial private database schema reserves player identity only. It has no Gold or gameplay inventory fields. Introduce economic models and transactional operations in the corresponding phases.
+The private schema defines Player identity and append-only AuditEvent history. Both foundation migrations are applied to the dedicated development project and permission-verified. Player ownership uses an internal UUID; audit IDs are historical snapshots. There are no Gold or gameplay inventory fields. Introduce economic models and transactional operations in their corresponding phases. See [database foundations](DATABASE.md).
 
-## Health and credentials
+## Request monitoring and security
+
+`ObservabilityModule` supplies structured JSON logging, request correlation and the replaceable safe error-reporting hook. `SecurityModule` supplies independent API and Auth-verification rate stores. Request correlation/header middleware runs before CORS, body parsing and handlers; rate/proxy settings are validated at startup. Public probes bypass the API budget. See [monitoring and security](SECURITY.md) for field privacy, process-failure behavior, per-process limits and production dependencies.
+
+```mermaid
+flowchart LR
+  A[Request ID and completion log] --> B[Headers and CORS]
+  B --> C[API budget and body size cap]
+  C --> D{Protected route?}
+  D -- Yes --> E[Auth budget and token verification]
+  D -- No --> F[Controller and DTO validation]
+  E --> F
+  F --> G[Response or safe error report]
+```
+
+## Environment and credentials
 
 Mode-specific loaders isolate development, test and production. The API validates startup inputs before creating the server and rejects administrative credentials in its runtime. The browser explicitly receives only validated public configuration. CORS compares exact allowed origins and returns 403 for unlisted requests/preflights. See [configuration and secret management](CONFIGURATION.md).
 

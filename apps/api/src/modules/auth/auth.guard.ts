@@ -4,12 +4,15 @@ import { Reflector } from '@nestjs/core';
 import type { VerifiedIdentity } from '@pondbound/shared';
 import { AuthService } from './auth.service.js';
 import { PUBLIC_ROUTE } from './public.decorator.js';
+import { RateLimits } from '../../security/rate-limits.service.js';
+import type { Request, Response } from 'express';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     @Inject(Reflector) private readonly reflector: Reflector,
     @Inject(AuthService) private readonly auth: AuthService,
+    @Inject(RateLimits) private readonly limits: RateLimits,
   ) {}
 
   async canActivate(context: ExecutionContext) {
@@ -20,7 +23,8 @@ export class AuthGuard implements CanActivate {
       ])
     )
       return true;
-    const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
+    const request = context.switchToHttp().getRequest<Request & AuthenticatedRequest>();
+    await this.limits.checkAuth(request, context.switchToHttp().getResponse<Response>());
     const header = request.headers.authorization;
     const match =
       typeof header === 'string' && header.length <= 8192

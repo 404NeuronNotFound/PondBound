@@ -6,3 +6,8 @@ allowBuilds:
   '@prisma/engines': true
   prisma: true
   '@nestjs/core': false
+overrides:
+  # Security fixes for Prisma tooling transitives; verify Prisma generation/migrations.
+  '@prisma/config>deepmerge-ts': 8.0.2
+  'prisma>mysql2': 3.24.6
+  'minimatch@10.2.6': 11.0.1

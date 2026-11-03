@@ -10,6 +10,7 @@ export function createCorsOptions(origins: readonly string[]): CorsOptions {
     },
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Authorization', 'Content-Type'],
+    exposedHeaders: ['X-Request-Id', 'RateLimit', 'RateLimit-Policy', 'Retry-After'],
     credentials: false,
     maxAge: 600,
   };

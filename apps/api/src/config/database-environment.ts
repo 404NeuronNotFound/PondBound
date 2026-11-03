@@ -3,7 +3,13 @@ import { z } from 'zod';
 const optional = <T extends z.ZodType>(schema: T) =>
   z.preprocess((value) => (value === '' ? undefined : value), schema.optional());
 export const runtimeDatabaseUrl = z.url().superRefine((value, context) => {
-  const url = new URL(value);
+  let url: URL;
+  try {
+    url = new URL(value);
+  } catch {
+    context.addIssue({ code: 'custom', message: 'Use a PostgreSQL URL' });
+    return;
+  }
   if (!['postgres:', 'postgresql:'].includes(url.protocol)) {
     context.addIssue({ code: 'custom', message: 'Use a PostgreSQL URL' });
   }

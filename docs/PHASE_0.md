@@ -4,6 +4,75 @@
 
 Establish the monorepo and runnable stack before Phase 1 world development. Preserve the user-provided whitepaper at the repository root.
 
+## Phase 00 exit-gate review — November 3, 2026
+
+**Technical decision: PASS for the Phase 00 development foundation.** The reviewed application revision passed protected GitHub CI; publication is tracked in [closeout PR #2](https://github.com/404NeuronNotFound/PondBound/pull/2). The PR records the final merge revision and checks.
+
+The initial HOLD review identified missing browser evidence, a delayed development migration and unpublished work. Browser acceptance and the hosted migration are now verified. The closeout release includes the three local foundation commits and the final favicon/mobile fixes. Task narratives below preserve earlier verification history; this section records current status.
+
+| Exit criterion                                         | Result                       | Evidence                                                                                                                                                                                   |
+| ------------------------------------------------------ | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Essential tasks complete and reviewed                  | Pass technically             | 00.01–00.10 implementation and acceptance reviewed; development migration/permissions and browser flows are now verified.                                                                  |
+| Automated/manual acceptance passed; defects documented | Pass                         | 76 automated tests, clean-checkout rehearsal, real Chrome interactions/screenshot inspection, live Auth isolation and temporary-account browser flow; resolved defects below.              |
+| Database/assets versioned; docs updated                | Pass in release              | Both immutable migrations/schema and asset placeholders/pipeline are tracked. Closeout changes and this review are included in the release PR. Original game artwork remains Phase 1 work. |
+| Security/performance/economy risks assessed            | Pass                         | Controls and scoped residual risks are accepted below for the development foundation.                                                                                                      |
+| Reviewer signs off                                     | Pass: agent technical review | Codex implementation/technical review is recorded below; independent human review is not claimed.                                                                                          |
+
+- [x] All essential task checkboxes are complete and reviewed.
+- [x] Automated and manual acceptance tests passed; defects documented.
+- [x] Database and asset changes are versioned; relevant docs updated.
+- [x] Security, performance and economy risks assessed for this phase.
+- [x] Agent technical reviewer signs off before the next phase; independent human approval is not claimed.
+
+### Acceptance and browser evidence
+
+- Automated gate: 38 backend, 25 frontend and 13 real PostgreSQL tests passed, with formatting, lint, strict types, builds, schema/migration/permission/seed checks and secret boundaries. The separate synthetic restore drill preserved data, timestamps, migration checksums, RLS/grants and audit immutability; its archive checksum was rechecked.
+- Clean-checkout bootstrap: frozen installation, both app startups without private files, repeated environment setup and the documented isolated PostgreSQL recipe passed with an unchanged lockfile/worktree.
+- Real browser: approved temporary driver and separately installed headless Chrome **156.0.8078.80**, fresh contexts, desktop 1280×900 and mobile viewports 390×844 / 320×844. This is a real renderer, not the unavailable in-app browser or mocked Phaser. Physical mobile hardware was not used.
+- Checked home/play/account direct entry, active navigation, back/forward, keyboard reachability of the skip link and main focus, unknown-route recovery, actual Phaser canvas creation/cleanup/reentry, and no horizontal overflow at both mobile widths. Screenshots were inspected for desktop home/play, mobile home/play and signed-in account layout.
+- Deliberately interrupted only the test browser's health request and engine import; offline/reconnect and error-boundary/reload recovery both passed. The normal browser scenario ended with zero unexpected console/page errors.
+- Live browser account: one confirmed temporary fixture account (no email sent) signed in through Supabase, resolved the correct API Player, restored its session, reused one profile after reload, rendered a long email at 320px and signed out. Each temporary user/profile was removed; immutable lifecycle snapshots contain internal entity IDs and no copied email/Auth UUID.
+- Live backend Auth smoke: invalid/tampered tokens, two-user identity isolation, spoofed role/ID rejection and concurrent first login passed after the hosted migration; its temporary users/profiles were removed.
+- Browser scripts/screenshots, empty-schema checkpoint and nonproduction restore evidence remain in ignored local verification artifacts. Credentials and private row exports are not included in the release.
+
+### Hosted development database closeout
+
+Verified the designated migration role, UTC, zero Player rows and the original migration checksum. Under a Player-table share lock, saved **schema DDL only** plus non-sensitive baseline migration metadata. No private row data or passwords were exported. This safely replaced the earlier rejected private-data export for the empty foundation; it is not a full backup procedure for a populated project.
+
+Applied `20261103010000_database_foundations`; `db:status` is up to date and `db:verify` passed runtime ownership/RLS, schema/migration isolation, audit append-only grants and browser denial. Real application profile creation and cleanup then passed. The [recovery plan](DATABASE.md) and [backup policy](SECURITY.md) remain mandatory for future populated deployments.
+
+### Defects resolved
+
+| Finding                                         | Resolution / verification                                                  |
+| ----------------------------------------------- | -------------------------------------------------------------------------- |
+| First-login unique-conflict race                | Existing fix retained; concurrency/live Auth checks pass                   |
+| Unsafe malformed-URL diagnostics                | Guarded validation and sanitized startup test pass                         |
+| React default raw error logging                 | Safe root callbacks and actual-root canary tests pass                      |
+| Sensitive values embedded in log message text   | Default-deny free text and allowlisted metadata; canaries pass             |
+| Missing favicon generated a browser console 404 | Explicit empty preview favicon; normal browser console is clean            |
+| Long signed-in email overflowed at 320px        | Account paragraph wrapping; real authenticated mobile browser check passes |
+
+### Risk disposition for the phase boundary
+
+| Category                                | Assessment / control                                                                                                                              | Accepted residual and owner/target                                                                                                                                                                        |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Security: disclosure/identity/ownership | Isolated modes/roles, public-field allowlist, safe logs/root hooks, token/DTO/ownership/RLS/audit tests, clean dependency audit                   | External SDK/hosting/collector configuration: project operator before public production deployment. New gameplay ownership rules: backend feature owner in each feature phase.                            |
+| Security: schema/recovery               | Both development migrations applied and grants verified; empty-schema checkpoint and separate synthetic restore verified                          | Populated/provider-wide backup, Auth/Storage coverage and recovery targets: project operator before real production data. No hosted restore drill is claimed.                                             |
+| Security: abuse/dependency maintenance  | API/auth-verification budgets, body cap, explicit proxy CIDRs, patched overrides and CI advisory scan                                             | Per-process limits reset on restart; shared/edge limits and provider login policy: operator before public/multiple-replica deployment. Override maintenance: repository maintainer on dependency changes. |
+| Performance: engine/client rendering    | Lazy engine, real desktop/mobile viewport canvas checks; current engine asset ~1.19 MB before compression                                         | Large-chunk warning accepted for this foundation. Physical-device FPS, asset/frame/loading budgets: Phase 1 owner before world/content acceptance; no production load benchmark is claimed.               |
+| Performance: API/database/logging       | Bounded pools/timeouts, request timings and throttle/pool tests                                                                                   | Capacity, replica/pool/log budgets: deployment owner before public traffic.                                                                                                                               |
+| Economy                                 | No Gold/wallet/market/token mutation exists; public config is presentation-only; server authority/ownership/transaction/audit conventions defined | Economy invariants, inflation/exploit simulation and recovery: feature owners when progression/economy/market systems are introduced. No economy balance certification is implied.                        |
+
+### Reviewer sign-off and scope
+
+- Reviewer: **Codex, implementing and technical-review agent**. Review type is explicitly agent technical review; no independent human approval is asserted.
+- Decision: **PASS for Phase 00's reproducible development foundation**. Application revision `b420ec0f0fd592ed5c26bf1ef63e62d7205a5911` passed the [required GitHub verification run](https://github.com/404NeuronNotFound/PondBound/actions/runs/41643577230), including all 76 tests and clean PostgreSQL migration/permission checks. Subsequent closeout edits update this review record only.
+- Accepted evidence: automated checks, real-renderer/browser screenshot inspection and interactions, real temporary-account Auth flow, development migration/permissions and synthetic recovery drill.
+- Accepted residuals: the assigned later-phase/production items above do not block local Phase 1 visual/world development. They cannot be treated as production readiness.
+- Phase 1 work has **not started**; the project owner chooses when to issue the next implementation command.
+
+The protected GitHub `verify` check remains mandatory for the final documentation revision, including for administrators. [PR #2](https://github.com/404NeuronNotFound/PondBound/pull/2) is the authoritative publication/merge record. Phase 00 is technically complete; the next phase still requires the owner's implementation command.
+
 ## Implemented
 
 - pnpm workspace with shared contracts, game presentation settings, and TypeScript configuration.
@@ -16,7 +85,7 @@ Establish the monorepo and runnable stack before Phase 1 world development. Pres
 
 ## Completion boundary
 
-Supabase infrastructure was verified in 00.04 and authentication/Player identity in 00.05. Further Phase 00 tasks remain separate. The preview is an engine integration check; it is not a playable world.
+All ten tasks have implementation/acceptance records. Supabase infrastructure, identity and both development migrations are verified; the current exit review and release status are recorded above. The preview is an engine integration check; it is not a playable world.
 
 ## 00.01 — Monorepo and workspace setup
 
@@ -107,6 +176,47 @@ Backend test filenames and commands distinguish unit checks from HTTP integratio
 Verification on November 3, 2026: frozen installation, `pnpm check`, both targeted test commands and Prisma validation passed. Results were 20 frontend tests, 10 backend unit tests, 16 HTTP integration tests and 5 real PostgreSQL tests. The database suite ran with `CI=true` against a newly initialized PostgreSQL 17.11 cluster; the cluster was stopped and its generated password file removed. The original whitepaper hash and applied migration remained unchanged. GitHub-hosted workflow execution is pending a push. See [code quality and tests](CODE_QUALITY.md).
 
 00.07 acceptance is complete as of November 3, 2026. The [hosted pull-request run](https://github.com/404NeuronNotFound/PondBound/actions/runs/41620220546) and corresponding push run passed frozen installation, formatting, lint, typecheck, frontend/backend tests, build, secret checks, Prisma validation and clean PostgreSQL migration/permission tests. `main` now requires the up-to-date `verify` check from the GitHub Actions app, including for administrators, and requires pull requests. GitHub reported PR #1 as blocked while its required check was pending. Failed or missing required checks therefore prevent merging. These repository settings were read back from the protection API after configuration; they are separate from the workflow file.
+
+## 00.08 — Database foundations
+
+Added a forward migration for PostgreSQL-generated UUID defaults, timezone-aware timestamps and immutable Player IDs/Auth IDs/creation time. Database triggers assign creation/update time and record Player creation/deletion atomically in an append-only AuditEvent table. Audit rows have bounded object metadata, constrained event names, timeline indexes, backend-only RLS and mutation/truncation protection. The original applied migration is unchanged.
+
+Documented internal-Player ownership foreign keys/indexes, restrictive deletion, atomic transfers, audit snapshot exceptions, and a forward-only migration/recovery policy. Explicit local-only Prisma seeds create two deterministic relational fixtures without Auth users or economic state; reruns preserve existing fixtures and conflicting identities roll back. Profile creation remains compatible with the original schema during deployment.
+
+Local verification passed 20 frontend tests, 27 ordinary backend tests and 13 real PostgreSQL tests, plus formatting, lint, typecheck, Prisma validation, production builds and secret-boundary checks. Database tests cover clean deployment/redeployment, Prisma schema drift, indexes, runtime/browser grants, UUID/time enforcement, immutable audit events, transactional rollback, seed CLI/repeatability/conflicts, and forward upgrade with existing UUIDs/timestamps and profile creation before/after migration. Disposable clusters were stopped and their password files removed. Hosted application is pending: automatic approval review rejected exporting the development database into a private recovery backup because that data transfer requires explicit authorization. No hosted database migration or seed was run. The implementation is recorded in local commit `114195d`. See [database foundations](DATABASE.md).
+
+00.08 acceptance follow-up: all three criteria pass locally for the foundation scope. Transaction-scoped ownership fixtures verify Player foreign keys, owner-scoped uniqueness, restrictive deletion and matching parent/child owners without adding premature gameplay tables. Repeated seeds preserve full Player rows and audit counts; identity conflicts roll back. The migration-specific rollback/recovery runbook covers failed transactions, conditional Prisma history reconciliation, application rollback and separate-database recovery. An injected failure before COMMIT proves that new tables/functions/triggers/defaults, timezone conversion and data repair roll back before a successful redeployment. A hosted backup restoration was not performed.
+
+## 00.09 — Documentation and environment runbook
+
+Updated the root README and documentation index with direct onboarding links. Added an architecture decision log covering workspace boundaries, React/Phaser responsibilities, server authority, identity, database roles, environment isolation, required CI and migration/audit policy. Added game-config conventions tied to the actual viewport export and consumers, plus root contribution/coding rules. The environment runbook covers preview, connected development, isolated tests and production handoff, with expected probes, troubleshooting and sanitized handoff information.
+
+Setup now identifies the pending hosted 00.08 rollout and explains that migration deployment applies every pending migration. Architecture/API module descriptions reflect the implemented Auth/Player modules and local audit schema. Initial verification checked Markdown formatting, repository-relative links and documented pnpm examples against package scripts. Live localhost probes returned 200 for API liveness, database readiness and the Vite health proxy; frontend `/`, `/play` and `/account` served their SPA entry pages. These HTTP checks do not establish visual rendering or browser interaction. The initial documentation pass did not rerun application/database tests; the later bootstrap rehearsal below did. No hosted database changes or publication occurred during this task.
+
+00.09 bootstrap acceptance passed locally on November 3, 2026 with Node 24.19.0, pnpm 12.9.1 and PostgreSQL 17.11. The review added explicit tool installation, first-run success criteria, a least-privilege existing-project handoff and a complete disposable PostgreSQL recipe. A temporary source snapshot containing 168 repository files was cloned with `git clone --no-local`; it contained no actual environment files, dependencies, generated Prisma client or build outputs. The snapshot included current local documentation changes and does not represent a verification of the older GitHub checkout.
+
+- Frozen installation succeeded with an unchanged lockfile, using the existing public dependency cache.
+- The documented `pnpm dev` started both apps without credentials. Direct/proxied health returned 200; readiness returned the expected 503/`unconfigured`. All three frontend routes served their SPA entry pages.
+- Repeated development environment setup preserved file hashes; test/production template setup also succeeded without private credentials.
+- `pnpm check` and Prisma validation passed in the checkout: 20 frontend and 27 ordinary backend tests, formatting, lint, strict types, builds and secret boundaries.
+- The PowerShell PostgreSQL recipe was copied verbatim from the setup guide and executed with preinstalled PostgreSQL 17 binaries on PATH. All 13 real database tests passed; the disposable cluster stopped and its password file was removed.
+- The checkout's Git working tree remained clean. The original workspace's localhost servers were restored and reported healthy/connected. No cloud provisioning, private database export or hosted migration occurred.
+
+This verifies bootstrap without private project knowledge for preview development and local tests. Connected Supabase development still needs the explicitly documented restricted credentials and existing test account from the operator; production hosting and the pending hosted 00.08 deployment remain separate.
+
+## 00.10 — Monitoring and baseline security
+
+Added allowlisted JSON logging, server-generated request UUIDs, safe response/log correlation and filtered 5xx reporting through an injectable adapter. Startup/fatal failures use sanitized structured events; uncaught process failures exit rather than continuing. React error boundaries invoke a safe browser reporting hook, and API failures retain validated request IDs without copying response messages.
+
+Independent API and protected-route verification budgets run before expensive work. Defaults are 120 API requests and 30 auth-verification attempts per IP per 60 seconds, with explicit proxy CIDRs and untrusted forwarding headers ignored. Probes/preflights remain operational. Helmet, no-store caching and a 16 KiB body limit provide API response/parser safeguards. The security guide describes single-process scope, shared-store requirements, provider-side password login limits and separate frontend-host headers.
+
+Dependency scans now have root commands and a CI step plus a weekly trigger. Targeted patched overrides resolved Prisma tooling and minimatch advisories; full and production graph scans reported no known vulnerabilities. A malformed database URL validation path was corrected so startup diagnostics identify fields without leaking input. Backup coverage, proposed retention/RPO/RTO, restore steps and operator monitoring/response responsibilities are documented in [monitoring and security](SECURITY.md).
+
+Local verification passed `pnpm check`: 37 backend and 23 frontend tests, formatting, lint, strict types, builds and secret checks. Another 13 real PostgreSQL tests passed with the patched dependencies, including Prisma schema drift, migrations, ownership, seeds and audit enforcement. Frozen installation remained reproducible. New HTTP tests exercised safe request/report metadata, spoofed IDs/forwarding headers, 429/Retry-After and window reset before upstream Auth calls, 413/malformed/CORS errors, security headers and failing reporters. Process tests verified JSON startup failures and safe fatal exits. Browser tests verified sanitized hook payloads, adapter-failure isolation and request-ID validation.
+
+A synthetic local backup/restore drill passed with PostgreSQL 17.11: Player/audit content, timestamps, migration checksums and grants/RLS matched after restoring into a separate database; audit immutability remained enforced. Localhost liveness/readiness returned 200 and an unauthenticated profile request returned a correlated 401 with baseline headers. Both dependency scans were clean. New CI/scheduled execution awaits publication; collector/alert destinations, distributed production throttling, Supabase Auth settings and hosted backup/restore configuration remain deployment responsibilities. No hosted database data was exported or changed during this task.
+
+00.10 acceptance follow-up: all three criteria pass locally for the owned application paths. Review found and closed React's default raw root-error logging path, then strengthened the logger to reject unapproved free-form message text. Tests cover nested credentials and unlabelled sensitive strings, raw errors/stacks, request bodies/headers/query/path values and invalid configuration. API IDs correlate response headers/envelopes with completion logs/reports across async context; browser records have unique event IDs and safe root callbacks. The full quality gate passed 38 backend and 25 frontend tests, builds, formatting, lint, types and secret checks. Together with the existing 13 PostgreSQL checks, this is 76 passing tests. The separate synthetic nonproduction dump/restore drill remains valid, with matching archive checksum, restored data/migration checksums and permissions/audit enforcement. External SDK/hosting/provider logging and a real hosted recovery drill remain outside this local verification.
 
 ## Initial scaffold verification — November 3, 2026
 

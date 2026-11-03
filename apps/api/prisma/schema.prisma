@@ -11,10 +11,27 @@ datasource db {
 // Private application schema: deliberately outside Supabase's default public API schema.
 // Gameplay models are introduced with their development phases.
 model Player {
-  id        String   @id @default(uuid()) @db.Uuid
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   authId    String   @unique @db.Uuid
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamptz(3)
 
+  @@schema("game")
+}
+
+// Append-only snapshots intentionally survive deletion of their referenced entity.
+// CHECK constraints, RLS and immutability triggers live in the SQL migration.
+model AuditEvent {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  occurredAt    DateTime @default(dbgenerated("clock_timestamp()")) @db.Timestamptz(3)
+  eventType     String   @db.VarChar(64)
+  entityType    String   @db.VarChar(64)
+  entityId      String   @db.Uuid
+  actorPlayerId String?  @db.Uuid
+  data          Json     @default("{}") @db.JsonB
+
+  @@index([entityType, entityId, occurredAt, id])
+  @@index([actorPlayerId, occurredAt, id])
+  @@index([occurredAt, id])
   @@schema("game")
 }

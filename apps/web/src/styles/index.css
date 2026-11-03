@@ -309,6 +309,9 @@ main:focus {
 .account-panel h1 {
   max-width: 14ch;
 }
+.account-panel > p {
+  overflow-wrap: anywhere;
+}
 .account-form {
   display: grid;
   gap: 1.25rem;

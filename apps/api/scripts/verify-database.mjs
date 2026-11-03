@@ -38,6 +38,20 @@ export async function verifyRuntimePrivileges(client) {
   for (const key of ['create_game', 'create_public', 'create_schema', 'migrate'])
     assert.equal(access[key], false, `Unexpected runtime permission: ${key}`);
   await client.query('SELECT id FROM game."Player" LIMIT 1');
+  const {
+    rows: [audit],
+  } = await client.query(`
+    SELECT (SELECT relrowsecurity FROM pg_class WHERE oid = 'game."AuditEvent"'::regclass) AS rls,
+      (SELECT pg_get_userbyid(relowner) FROM pg_class WHERE oid = 'game."AuditEvent"'::regclass) AS owner,
+      has_table_privilege(current_user, 'game."AuditEvent"', 'SELECT') AS read,
+      has_table_privilege(current_user, 'game."AuditEvent"', 'INSERT') AS append,
+      has_table_privilege(current_user, 'game."AuditEvent"', 'UPDATE, DELETE, TRUNCATE') AS mutate
+  `);
+  assert.equal(audit.rls, true);
+  assert.equal(audit.owner, 'pondbound_migrator');
+  assert.equal(audit.read, true);
+  assert.equal(audit.append, true);
+  assert.equal(audit.mutate, false);
   const { rows: browserRoles } = await client.query(
     "SELECT rolname FROM pg_roles WHERE rolname IN ('anon', 'authenticated')",
   );
@@ -50,6 +64,13 @@ export async function verifyRuntimePrivileges(client) {
     );
     assert.equal(browser.schema_access, false);
     assert.equal(browser.table_access, false);
+    const {
+      rows: [auditAccess],
+    } = await client.query(
+      "SELECT has_table_privilege($1, 'game.\"AuditEvent\"', 'SELECT, INSERT, UPDATE, DELETE, TRUNCATE') AS allowed",
+      [rolname],
+    );
+    assert.equal(auditAccess.allowed, false);
   }
 }
 

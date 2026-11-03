@@ -4,6 +4,8 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+  schedule:
+    - cron: '17 3 * * 1'
 
 permissions:
   contents: read
@@ -42,6 +44,8 @@ jobs:
           run_install: false
       - name: Install from lockfile
         run: pnpm install --frozen-lockfile
+      - name: Scan dependency advisories (high and critical fail)
+        run: pnpm security:audit
       - name: Create harmless server-only build canary
         run: node --input-type=module -e "import { appendFileSync } from 'node:fs'; import { randomBytes } from 'node:crypto'; appendFileSync(process.env.GITHUB_ENV, 'SERVER_ONLY_SECRET_CANARY=' + randomBytes(32).toString('hex') + '\n');"
       - name: Format, lint, typecheck, test, build and check secret boundaries

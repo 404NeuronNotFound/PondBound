@@ -26,7 +26,7 @@ An unconfigured database does not stop local API or frontend development. Readin
 
 ## Modules and request handling
 
-`AppModule` composes `HealthModule` and the API identity controller. `HealthModule` imports `DatabaseModule`, which owns and exports `DatabaseService`. Feature modules belong under `src/modules` and must be registered explicitly. `configureApp` is shared by the real server and HTTP test applications.
+`AppModule` composes Auth, Player and health modules plus the API identity controller. Player/health modules share `DatabaseModule`, which owns and exports `DatabaseService`. Feature modules belong under `src/modules` and must be registered explicitly. `configureApp` is shared by the real server and HTTP test applications.
 
 Global validation uses DTO classes with class-validator decorators. It transforms plain request bodies into DTO instances, rejects undeclared properties, and rejects unknown values. It does not enable implicit scalar coercion; add explicit conversion decorators or parameter pipes when needed. Validation responses exclude DTO targets and submitted values.
 
@@ -43,6 +43,8 @@ The global exception filter returns this JSON shape for HTTP exceptions, invalid
 ```
 
 Intentional client errors retain their message or validation messages. Server exceptions return a generic HTTP reason phrase and never expose the exception message, stack, or arbitrary response properties. Unknown-route messages are generic, and error paths omit query strings. A final adapter fallback handles unknown paths outside the global `/api` prefix with the same format.
+
+Responses include a server-generated `X-Request-Id`; error bodies also include `requestId`. API/protected-route rate limits return JSON 429 with `Retry-After`, and bodies over 16 KiB return JSON 413. Baseline headers, safe log/report fields, trusted-proxy settings and provider Auth limits are described in [monitoring and security](SECURITY.md).
 
 The shared package defines runtime schemas and TypeScript types for liveness, readiness, API identity, Player profiles and exception responses. Gameplay endpoints are implemented in later phases.
 

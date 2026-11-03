@@ -38,7 +38,7 @@ if (directUrl) {
 }
 export default defineConfig({
   schema: 'prisma/schema.prisma',
-  migrations: { path: 'prisma/migrations' },
+  migrations: { path: 'prisma/migrations', seed: 'node scripts/seed-database.mjs' },
   // Generation stays offline; migration commands require explicit migration credentials.
   datasource: directUrl
     ? { url: directUrl, shadowDatabaseUrl: process.env.SHADOW_DATABASE_URL || undefined }
