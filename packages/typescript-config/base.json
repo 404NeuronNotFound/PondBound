@@ -1,7 +1,16 @@
 {
   "compilerOptions": {
-    "target": "ES2023", "strict": true, "skipLibCheck": true,
-    "esModuleInterop": true, "forceConsistentCasingInFileNames": true,
-    "noUncheckedIndexedAccess": true, "resolveJsonModule": true
+    "target": "ES2023",
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "noUncheckedIndexedAccess": true,
+    "resolveJsonModule": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
   }
 }

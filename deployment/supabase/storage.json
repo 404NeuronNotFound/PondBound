@@ -1,0 +1,6 @@
+{
+  "id": "pondbound-media",
+  "public": false,
+  "fileSizeLimit": 5242880,
+  "allowedMimeTypes": ["image/png", "image/webp", "image/jpeg"]
+}

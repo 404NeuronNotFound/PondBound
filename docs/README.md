@@ -3,6 +3,11 @@
 - [Whitepaper](../WHITEPAPER.md): design and development phases.
 - [Setup](SETUP.md): local commands and Supabase configuration.
 - [Architecture](ARCHITECTURE.md): responsibilities, security boundaries, folder ownership.
+- [API foundation](API.md): probes, versioning, validation, exception responses and HTTP tests.
+- [Authentication](AUTHENTICATION.md): token verification, Player mapping and account sign-in.
+- [Configuration and secrets](CONFIGURATION.md): mode isolation, validation, CORS and credential rotation.
+- [Code quality and tests](CODE_QUALITY.md): formatting, lint, strict TypeScript, test suites, PR CI and optional hooks.
+- [Supabase infrastructure](../deployment/supabase/README.md): database roles, migrations, TLS, pooling and private Storage.
 - [Phase 0](PHASE_0.md): implemented foundation and verification limits.
 - [Asset pipeline](ASSETS.md): source toolkit and production requirements.
 
