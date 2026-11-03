@@ -4,6 +4,7 @@
 - [Setup](SETUP.md): local commands and Supabase configuration.
 - [Architecture](ARCHITECTURE.md): responsibilities, security boundaries, folder ownership.
 - [API foundation](API.md): probes, versioning, validation, exception responses and HTTP tests.
+- [Authentication](AUTHENTICATION.md): token verification, Player mapping and account sign-in.
 - [Supabase infrastructure](../deployment/supabase/README.md): database roles, migrations, TLS, pooling and private Storage.
 - [Phase 0](PHASE_0.md): implemented foundation and verification limits.
 - [Asset pipeline](ASSETS.md): source toolkit and production requirements.

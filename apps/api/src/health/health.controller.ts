@@ -2,7 +2,9 @@ import { Controller, Get, Inject, Res, VERSION_NEUTRAL } from '@nestjs/common';
 import type { HealthResponse, ReadinessResponse } from '@pondbound/shared';
 import type { Response } from 'express';
 import { DatabaseService } from '../database/database.service.js';
+import { Public } from '../modules/auth/public.decorator.js';
 
+@Public()
 @Controller({ version: VERSION_NEUTRAL })
 export class HealthController {
   constructor(@Inject(DatabaseService) private readonly database: DatabaseService) {}

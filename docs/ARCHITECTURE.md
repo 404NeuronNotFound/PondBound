@@ -2,15 +2,15 @@
 
 ## Responsibilities
 
-React owns the application interface. React Router supplies the home route (`/`), pond preview (`/play`), and a catch-all 404. `AppShell` keeps navigation and server status mounted between pages. Page modules load lazily with a Suspense loading state and an error boundary that resets on navigation. A separate outer boundary protects the shell itself.
+React owns the application interface. React Router supplies home (`/`), pond preview (`/play`), account (`/account`), and a catch-all 404. `AppShell` keeps navigation and server status mounted between pages. Page modules load lazily with a Suspense loading state and an error boundary that resets on navigation. A separate outer boundary protects the shell itself.
 
 Phaser 3 owns the canvas and future world presentation. Visiting `/play` loads the engine; it is not loaded on the home page. React mounts and destroys one Phaser instance with its game viewport. A loading overlay remains until Phaser's post-boot callback. Async import/startup failures become render errors handled by the nearest boundary. The foundation scene contains text only; world assets and movement start in Phase 1.
 
 The shell includes active navigation, a skip link, main-content focus and document-title updates on navigation, live status announcements, visible keyboard focus, fluid typography, narrow-screen layouts, and reduced-motion support. Server health checks time out after five seconds; offline status offers a manual reconnect while navigation remains available.
 
-NestJS owns gameplay decisions and validates request DTOs through a global validation pipe. `AppModule` composes `HealthModule`, which imports `DatabaseModule`. The foundation exposes operational probes and versioned API identity. Application routes use `/api/v1/...`; a global exception filter provides consistent JSON errors and hides internal server details. See the [API guide](API.md). There are no fish, currency, trading, enhancement, or authentication endpoints yet.
+NestJS owns gameplay decisions and validates request DTOs through a global validation pipe. `AppModule` composes Auth, Player and health modules; Player/health modules share `DatabaseModule`. Application routes use `/api/v1/...`; a global exception filter provides consistent JSON errors and hides internal server details. A global guard verifies Supabase access tokens; explicit public routes cover probes and API identity. Player endpoints resolve only the verified caller. See the [API guide](API.md) and [authentication](AUTHENTICATION.md). Gameplay/economic endpoints remain future work.
 
-Prisma connects NestJS to Supabase PostgreSQL through one bounded `pg.Pool` per API process. Runtime and migration logins are distinct. PostgreSQL and the private media bucket are provisioned in the dedicated development project. Auth and selected Realtime behavior are deferred to their relevant tasks. See the [infrastructure guide](../deployment/supabase/README.md).
+Prisma connects NestJS to Supabase PostgreSQL through one bounded `pg.Pool` per API process. Runtime and migration logins are distinct. PostgreSQL, the private media bucket and Supabase Auth are connected to the dedicated development project. Realtime behavior remains future work. See the [infrastructure guide](../deployment/supabase/README.md).
 
 ## Boundaries
 

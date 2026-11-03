@@ -44,7 +44,11 @@ The global exception filter returns this JSON shape for HTTP exceptions, invalid
 
 Intentional client errors retain their message or validation messages. Server exceptions return a generic HTTP reason phrase and never expose the exception message, stack, or arbitrary response properties. Unknown-route messages are generic, and error paths omit query strings. A final adapter fallback handles unknown paths outside the global `/api` prefix with the same format.
 
-The shared package defines runtime schemas and TypeScript types for liveness, readiness, API identity and exception responses. Authentication and gameplay endpoints are implemented in later tasks.
+The shared package defines runtime schemas and TypeScript types for liveness, readiness, API identity, Player profiles and exception responses. Gameplay endpoints are implemented in later phases.
+
+## Authentication and identity
+
+Application routes require `Authorization: Bearer <Supabase access token>` by default. Public probes and API identity are explicitly excluded. `POST /api/v1/players/me` accepts `{}` and initializes/reuses only the verified caller's Player; `GET /api/v1/players/me` reads it. Missing/invalid tokens return 401, unavailable Auth returns 503, and missing profiles return 404. Initialization rejects identity, role or other body fields with 400. See [authentication](AUTHENTICATION.md) for the full contract and live verification command.
 
 ## Verification
 

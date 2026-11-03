@@ -16,7 +16,7 @@ Establish the monorepo and runnable stack before Phase 1 world development. Pres
 
 ## Completion boundary
 
-The Supabase PostgreSQL connection, initial migration, runtime permissions and private Storage bucket were configured and verified in 00.04. Further Phase 00 tasks, including authentication, remain separate. The preview is an engine integration check; it is not a playable world.
+Supabase infrastructure was verified in 00.04 and authentication/Player identity in 00.05. Further Phase 00 tasks remain separate. The preview is an engine integration check; it is not a playable world.
 
 ## 00.01 — Monorepo and workspace setup
 
@@ -79,6 +79,16 @@ Verification on November 3, 2026:
 See the [infrastructure guide](../deployment/supabase/README.md) for repeatable provisioning, credentials, pooling and migration authoring. Auth and player upload features remain outside 00.04.
 
 00.04 acceptance follow-up: added a GitHub Actions workflow with disposable PostgreSQL and no cloud credentials. A fresh local clone passed frozen installation, the full CI command sequence and a migration to an asserted-clean database with `CI=true`. The secret-boundary guard passed against real local configuration and the browser build; negative canary/browser-variable cases were rejected. This verifies the CI commands locally; a GitHub-hosted run is pending a push.
+
+## 00.05 — Authentication and identity
+
+Supabase Auth verifies identity. NestJS protects routes by default using a global guard and request-time `getUser(token)` verification with the public project key. Health and API identity are explicitly public. Protected `POST/GET /api/v1/players/me` initialize/read only the verified caller's profile, keyed by the existing unique auth UUID. User metadata, request IDs and client roles do not determine identity or permissions.
+
+The `/account` page supports existing-account sign-in, session restoration, profile verification/retry and sign-out. Public foundation routes remain available. Registration/reset/deletion interfaces and future administrative permissions are outside this task.
+
+Verification on November 3, 2026: automated tests passed 20 backend and 18 frontend cases. Live Supabase verification rejected missing/malformed/tampered tokens, resolved the correct Player for two users, rejected body/metadata/query identity overrides, and reused one Player during five concurrent first logins. The live test exposed a unique-conflict race in empty-update upsert; it was corrected and retested. All temporary users/profiles were removed. No browser connection was available for visual verification.
+
+See [authentication](AUTHENTICATION.md) for configuration and `pnpm auth:verify`. No applied schema migration was edited.
 
 ## Initial scaffold verification — November 3, 2026
 

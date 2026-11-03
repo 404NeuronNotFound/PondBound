@@ -9,7 +9,7 @@ export function AppShell() {
   const content = useRef<HTMLElement>(null);
   useEffect(() => {
     const path = pathname.replace(/\/+$/, '') || '/';
-    const title = path === '/' ? 'A quiet beginning' : path === '/play' ? 'Pond preview' : 'Page not found';
+    const title = path === '/' ? 'A quiet beginning' : path === '/play' ? 'Pond preview' : path === '/account' ? 'Your account' : 'Page not found';
     document.title = `${title} · Pondbound`;
     content.current?.focus({ preventScroll: true });
   }, [pathname]);
@@ -22,6 +22,7 @@ export function AppShell() {
         <nav className="site-nav" aria-label="Main navigation">
           <NavLink to="/" end>Home</NavLink>
           <NavLink to="/play">Pond preview</NavLink>
+          <NavLink to="/account">Account</NavLink>
         </nav>
       </header>
       <main id="main-content" ref={content} tabIndex={-1}>

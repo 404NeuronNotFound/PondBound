@@ -27,7 +27,7 @@ Create or select a Supabase project dedicated to Pondbound. Do not reuse PaServe
 2. Run `pnpm db:bootstrap` to create restricted roles/schema and generate separate runtime and migration credentials. Administrator credentials never belong in the runtime `DATABASE_URL`.
 3. Run `pnpm db:deploy`, `pnpm db:verify`, and `pnpm db:status` to apply the committed initial migration and verify its permissions. Run `pnpm storage:provision` for the private bucket.
 4. Restart the API and request `http://127.0.0.1:3000/ready`. HTTP 200 with `database: connected` confirms a Prisma query succeeded. A 503 reports unconfigured or unavailable without exposing connection secrets.
-5. Add the public project URL and publishable key to the web app's environment. Authentication UI and user-facing Storage operations are later tasks.
+5. Add the public project URL and publishable key to both API (`SUPABASE_*`) and web (`VITE_SUPABASE_*`) environments. `/account` supports sign-in for existing accounts. Registration/reset UI and user-facing Storage operations are later tasks. See [authentication](AUTHENTICATION.md).
 
 The initial Player model lives in a private `game` schema. Keep this schema out of Supabase's exposed Data API schemas and do not grant `anon` or `authenticated` direct table access. If a future table is exposed, enable and test Row Level Security before making it client-accessible. The NestJS API will own gameplay writes.
 
@@ -53,6 +53,7 @@ The existing PondBound Development project now has the initial migration, restri
 | `pnpm db:verify` | Check live runtime permissions and browser isolation |
 | `pnpm db:status` | Inspect applied migration status |
 | `pnpm storage:provision` | Create or verify the private Storage bucket |
+| `pnpm auth:verify` | Explicit live Auth/profile smoke test with temporary development users and cleanup |
 
 The generated Prisma client and build outputs are ignored. `pnpm install --frozen-lockfile` plus `pnpm build` reconstructs them. In PowerShell environments that restrict `.ps1` wrappers, use `pnpm.cmd` for every pnpm command. Windows uses the same root commands as macOS and Linux.
 

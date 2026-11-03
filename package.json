@@ -17,7 +17,8 @@
     "db:status": "pnpm --filter @pondbound/api db:status",
     "db:bootstrap": "pnpm --filter @pondbound/api db:bootstrap",
     "db:verify": "pnpm --filter @pondbound/api db:verify",
-    "storage:provision": "pnpm --filter @pondbound/api storage:provision"
+    "storage:provision": "pnpm --filter @pondbound/api storage:provision",
+    "auth:verify": "pnpm --filter @pondbound/api auth:verify"
   },
   "devDependencies": { "eslint": "^10.10.0", "typescript-eslint": "^8.69.0", "typescript": "~6.0.2" }
 }

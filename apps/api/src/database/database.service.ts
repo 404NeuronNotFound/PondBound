@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, ServiceUnavailableException } from '@nestjs/common';
 import type { OnModuleDestroy } from '@nestjs/common';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../generated/prisma/client.js';
@@ -14,6 +14,11 @@ export class DatabaseService implements OnModuleDestroy {
 
   constructor() {
     this.pool?.on('error', () => this.logger.warn('An idle database connection failed.'));
+  }
+
+  get prisma(): PrismaClient {
+    if (!this.client) throw new ServiceUnavailableException('Database is not configured');
+    return this.client;
   }
 
   async readiness(): Promise<'connected' | 'unconfigured' | 'unavailable'> {

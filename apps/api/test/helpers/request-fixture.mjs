@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { BadRequestException, Body, Controller, Get, InternalServerErrorException, Post, Version } from '@nestjs/common';
 import { IsString, MinLength } from 'class-validator';
+import { Public } from '../../dist/modules/auth/public.decorator.js';
 
 // Test-only routes: these are never registered by the production AppModule.
 export class RequestDto { name; }
@@ -15,6 +16,7 @@ export class RequestFixture {
   versionTwo() { return { version: '2' }; }
 }
 Controller('foundation-test')(RequestFixture);
+Public()(RequestFixture);
 const prototype = RequestFixture.prototype;
 Post('validate')(prototype, 'validate', Object.getOwnPropertyDescriptor(prototype, 'validate'));
 Body()(prototype, 'validate', 0);
