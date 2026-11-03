@@ -12,7 +12,7 @@ Use [setup](SETUP.md) for installation and the command catalog, [configuration](
 | Real database tests   | `pnpm test:database`                                                     | `TEST_DB_ADMIN_URL` for a fresh loopback `pondbound_test_*` database in a disposable PostgreSQL 17 cluster      | Creates test roles, applies migrations and verifies data/permissions; with `CI=true`, asserts an empty game schema |
 | Production handoff    | `pnpm build`, then `pnpm --filter @pondbound/api start`                  | Explicit production runtime/Auth/HTTPS origins, public web build configuration and reviewed database migrations | API fails fast on missing required inputs; frontend/API hosting must be configured separately                      |
 
-The hosted development project has its original migration and infrastructure. The 00.08 database-foundation migration has local verification but is awaiting approval for its hosted recovery backup/deployment. `/ready` checks connectivity, not migration completeness. Check deployment status in [Phase 0](PHASE_0.md) before treating a healthy database as current schema. Do not run seeds against the hosted project.
+The hosted development project has both foundation migrations and verified runtime permissions. The 00.08 rollout used a schema-only checkpoint after confirming zero Player rows; no private rows were exported. `/ready` checks connectivity, not migration completeness. Check deployment status in [Phase 0](PHASE_0.md) before treating a healthy database as current schema. Do not run seeds against the hosted project.
 
 ## Start or resume local development
 

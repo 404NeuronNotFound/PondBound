@@ -4,17 +4,17 @@ Recorded November 3, 2026. This log explains the decisions represented by the cu
 
 Keep decision IDs stable. Add a new entry when a choice changes a package boundary, source of truth, persistent data format, identity model or deployment contract. Record context, decision, consequences and status. Mark a replaced entry as superseded and link its replacement; preserve the original reasoning.
 
-| ID      | Decision                                                                 | Status                                                      |
-| ------- | ------------------------------------------------------------------------ | ----------------------------------------------------------- |
-| ADR-001 | pnpm workspace with buildable shared packages                            | Accepted; implemented                                       |
-| ADR-002 | React shell and lazy Phaser viewport                                     | Accepted; implemented                                       |
-| ADR-003 | Server-authoritative gameplay with shared public contracts               | Accepted; foundation implemented                            |
-| ADR-004 | Supabase Auth UUID mapped to an internal Player UUID                     | Accepted; implemented                                       |
-| ADR-005 | Private Prisma schema and separate database roles                        | Accepted; implemented                                       |
-| ADR-006 | Validated, isolated environment modes and explicit browser configuration | Accepted; implemented                                       |
-| ADR-007 | Required CI check with disposable database tests                         | Accepted; configured in 00.07                               |
-| ADR-008 | Forward migrations, append-only audit and local-only fixtures            | Accepted; 00.08 implemented locally, hosted rollout pending |
-| ADR-009 | Safe structured telemetry and bounded baseline security                  | Accepted; implemented locally                               |
+| ID      | Decision                                                                 | Status                                               |
+| ------- | ------------------------------------------------------------------------ | ---------------------------------------------------- |
+| ADR-001 | pnpm workspace with buildable shared packages                            | Accepted; implemented                                |
+| ADR-002 | React shell and lazy Phaser viewport                                     | Accepted; implemented                                |
+| ADR-003 | Server-authoritative gameplay with shared public contracts               | Accepted; foundation implemented                     |
+| ADR-004 | Supabase Auth UUID mapped to an internal Player UUID                     | Accepted; implemented                                |
+| ADR-005 | Private Prisma schema and separate database roles                        | Accepted; implemented                                |
+| ADR-006 | Validated, isolated environment modes and explicit browser configuration | Accepted; implemented                                |
+| ADR-007 | Required CI check with disposable database tests                         | Accepted; configured in 00.07                        |
+| ADR-008 | Forward migrations, append-only audit and local-only fixtures            | Accepted; development migration applied and verified |
+| ADR-009 | Safe structured telemetry and bounded baseline security                  | Accepted; implemented locally                        |
 
 ## ADR-001: pnpm workspace
 
@@ -78,7 +78,7 @@ Keep decision IDs stable. Add a new entry when a choice changes a package bounda
 
 **Decision:** use reviewed forward migrations, database-generated UUID defaults, UTC-aware timestamps, protected Player identities and append-only audit events. Player lifecycle events share the business transaction. Audit actor/entity IDs are historical snapshots; future owned entities use indexed, restrictive Player foreign keys. Seeds create deterministic fixtures only in disposable local databases.
 
-**Consequences:** migration owners remain trusted DDL administrators. Audit corrections append events; destructive down-migrations are not the recovery mechanism. The 00.08 migration, ownership/seed tests and recovery plan exist locally; its hosted backup/deployment is still pending explicit approval. See [database foundations](DATABASE.md).
+**Consequences:** migration owners remain trusted DDL administrators. Audit corrections append events; destructive down-migrations are not the recovery mechanism. The 00.08 migration, ownership/seed tests and recovery plan are verified, and the hosted development migration is applied. A verified empty Player table allowed a schema-only checkpoint without private-row export. See [database foundations](DATABASE.md).
 
 ## ADR-009: monitoring and baseline security
 

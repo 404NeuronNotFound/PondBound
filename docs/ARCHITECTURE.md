@@ -24,7 +24,7 @@ Prisma connects NestJS to Supabase PostgreSQL through one bounded `pg.Pool` per 
 - `packages/game-config` currently contains presentation settings only. Never put secrets or authoritative hidden probabilities in a browser-imported package.
 - `packages/typescript-config` holds compiler defaults; lint rules live at the root until multiple distinct configurations are needed.
 
-The private schema defines Player identity and, in the locally verified 00.08 migration, append-only AuditEvent history. Player ownership uses an internal UUID; audit IDs are historical snapshots. There are no Gold or gameplay inventory fields. Introduce economic models and transactional operations in their corresponding phases. The hosted 00.08 rollout remains pending; see [database foundations](DATABASE.md).
+The private schema defines Player identity and append-only AuditEvent history. Both foundation migrations are applied to the dedicated development project and permission-verified. Player ownership uses an internal UUID; audit IDs are historical snapshots. There are no Gold or gameplay inventory fields. Introduce economic models and transactional operations in their corresponding phases. See [database foundations](DATABASE.md).
 
 ## Request monitoring and security
 

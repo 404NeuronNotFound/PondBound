@@ -4,6 +4,69 @@
 
 Establish the monorepo and runnable stack before Phase 1 world development. Preserve the user-provided whitepaper at the repository root.
 
+## Phase 00 exit-gate review — November 3, 2026
+
+**Technical decision: GO for the Phase 00 foundation, conditional on the protected closeout PR passing CI and merging. Release publication is the last outstanding operation.**
+
+The initial HOLD review identified missing browser evidence, a delayed development migration and unpublished work. Browser acceptance and the hosted migration are now verified. The closeout release includes the three local foundation commits and the final favicon/mobile fixes. Task narratives below preserve earlier verification history; this section records current status.
+
+| Exit criterion                                         | Result                                | Evidence                                                                                                                                                                                   |
+| ------------------------------------------------------ | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Essential tasks complete and reviewed                  | Pass technically                      | 00.01–00.10 implementation and acceptance reviewed; development migration/permissions and browser flows are now verified.                                                                  |
+| Automated/manual acceptance passed; defects documented | Pass                                  | 76 automated tests, clean-checkout rehearsal, real Chrome interactions/screenshot inspection, live Auth isolation and temporary-account browser flow; resolved defects below.              |
+| Database/assets versioned; docs updated                | Pass in release                       | Both immutable migrations/schema and asset placeholders/pipeline are tracked. Closeout changes and this review are included in the release PR. Original game artwork remains Phase 1 work. |
+| Security/performance/economy risks assessed            | Pass                                  | Controls and scoped residual risks are accepted below for the development foundation.                                                                                                      |
+| Reviewer signs off                                     | Technical GO, subject to protected CI | Codex implementation/technical review is recorded below; independent human review is not claimed.                                                                                          |
+
+### Acceptance and browser evidence
+
+- Automated gate: 38 backend, 25 frontend and 13 real PostgreSQL tests passed, with formatting, lint, strict types, builds, schema/migration/permission/seed checks and secret boundaries. The separate synthetic restore drill preserved data, timestamps, migration checksums, RLS/grants and audit immutability; its archive checksum was rechecked.
+- Clean-checkout bootstrap: frozen installation, both app startups without private files, repeated environment setup and the documented isolated PostgreSQL recipe passed with an unchanged lockfile/worktree.
+- Real browser: approved temporary driver and separately installed headless Chrome **156.0.8078.80**, fresh contexts, desktop 1280×900 and mobile viewports 390×844 / 320×844. This is a real renderer, not the unavailable in-app browser or mocked Phaser. Physical mobile hardware was not used.
+- Checked home/play/account direct entry, active navigation, back/forward, keyboard reachability of the skip link and main focus, unknown-route recovery, actual Phaser canvas creation/cleanup/reentry, and no horizontal overflow at both mobile widths. Screenshots were inspected for desktop home/play, mobile home/play and signed-in account layout.
+- Deliberately interrupted only the test browser's health request and engine import; offline/reconnect and error-boundary/reload recovery both passed. The normal browser scenario ended with zero unexpected console/page errors.
+- Live browser account: one confirmed temporary fixture account (no email sent) signed in through Supabase, resolved the correct API Player, restored its session, reused one profile after reload, rendered a long email at 320px and signed out. Each temporary user/profile was removed; immutable lifecycle snapshots contain internal entity IDs and no copied email/Auth UUID.
+- Live backend Auth smoke: invalid/tampered tokens, two-user identity isolation, spoofed role/ID rejection and concurrent first login passed after the hosted migration; its temporary users/profiles were removed.
+- Browser scripts/screenshots, empty-schema checkpoint and nonproduction restore evidence remain in ignored local verification artifacts. Credentials and private row exports are not included in the release.
+
+### Hosted development database closeout
+
+Verified the designated migration role, UTC, zero Player rows and the original migration checksum. Under a Player-table share lock, saved **schema DDL only** plus non-sensitive baseline migration metadata. No private row data or passwords were exported. This safely replaced the earlier rejected private-data export for the empty foundation; it is not a full backup procedure for a populated project.
+
+Applied `20261103010000_database_foundations`; `db:status` is up to date and `db:verify` passed runtime ownership/RLS, schema/migration isolation, audit append-only grants and browser denial. Real application profile creation and cleanup then passed. The [recovery plan](DATABASE.md) and [backup policy](SECURITY.md) remain mandatory for future populated deployments.
+
+### Defects resolved
+
+| Finding                                         | Resolution / verification                                                  |
+| ----------------------------------------------- | -------------------------------------------------------------------------- |
+| First-login unique-conflict race                | Existing fix retained; concurrency/live Auth checks pass                   |
+| Unsafe malformed-URL diagnostics                | Guarded validation and sanitized startup test pass                         |
+| React default raw error logging                 | Safe root callbacks and actual-root canary tests pass                      |
+| Sensitive values embedded in log message text   | Default-deny free text and allowlisted metadata; canaries pass             |
+| Missing favicon generated a browser console 404 | Explicit empty preview favicon; normal browser console is clean            |
+| Long signed-in email overflowed at 320px        | Account paragraph wrapping; real authenticated mobile browser check passes |
+
+### Risk disposition for the phase boundary
+
+| Category                                | Assessment / control                                                                                                                              | Accepted residual and owner/target                                                                                                                                                                        |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Security: disclosure/identity/ownership | Isolated modes/roles, public-field allowlist, safe logs/root hooks, token/DTO/ownership/RLS/audit tests, clean dependency audit                   | External SDK/hosting/collector configuration: project operator before public production deployment. New gameplay ownership rules: backend feature owner in each feature phase.                            |
+| Security: schema/recovery               | Both development migrations applied and grants verified; empty-schema checkpoint and separate synthetic restore verified                          | Populated/provider-wide backup, Auth/Storage coverage and recovery targets: project operator before real production data. No hosted restore drill is claimed.                                             |
+| Security: abuse/dependency maintenance  | API/auth-verification budgets, body cap, explicit proxy CIDRs, patched overrides and CI advisory scan                                             | Per-process limits reset on restart; shared/edge limits and provider login policy: operator before public/multiple-replica deployment. Override maintenance: repository maintainer on dependency changes. |
+| Performance: engine/client rendering    | Lazy engine, real desktop/mobile viewport canvas checks; current engine asset ~1.19 MB before compression                                         | Large-chunk warning accepted for this foundation. Physical-device FPS, asset/frame/loading budgets: Phase 1 owner before world/content acceptance; no production load benchmark is claimed.               |
+| Performance: API/database/logging       | Bounded pools/timeouts, request timings and throttle/pool tests                                                                                   | Capacity, replica/pool/log budgets: deployment owner before public traffic.                                                                                                                               |
+| Economy                                 | No Gold/wallet/market/token mutation exists; public config is presentation-only; server authority/ownership/transaction/audit conventions defined | Economy invariants, inflation/exploit simulation and recovery: feature owners when progression/economy/market systems are introduced. No economy balance certification is implied.                        |
+
+### Reviewer sign-off and scope
+
+- Reviewer: **Codex, implementing and technical-review agent**. Review type is explicitly agent technical review; no independent human approval is asserted.
+- Decision: **GO for Phase 00's reproducible development foundation**, after the required closeout CI/merge. Final code revision and hosted run will be recorded once available.
+- Accepted evidence: automated checks, real-renderer/browser screenshot inspection and interactions, real temporary-account Auth flow, development migration/permissions and synthetic recovery drill.
+- Accepted residuals: the assigned later-phase/production items above do not block local Phase 1 visual/world development. They cannot be treated as production readiness.
+- Phase 1 work has **not started**; the project owner chooses when to issue the next implementation command.
+
+The protected GitHub `verify` check remains mandatory, including for administrators. Release completion will be recorded after that exact closeout revision passes and is merged.
+
 ## Implemented
 
 - pnpm workspace with shared contracts, game presentation settings, and TypeScript configuration.
@@ -16,7 +79,7 @@ Establish the monorepo and runnable stack before Phase 1 world development. Pres
 
 ## Completion boundary
 
-Supabase infrastructure was verified in 00.04 and authentication/Player identity in 00.05. Further Phase 00 tasks remain separate. The preview is an engine integration check; it is not a playable world.
+All ten tasks have implementation/acceptance records. Supabase infrastructure, identity and both development migrations are verified; the current exit review and release status are recorded above. The preview is an engine integration check; it is not a playable world.
 
 ## 00.01 — Monorepo and workspace setup
 

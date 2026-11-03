@@ -61,9 +61,9 @@ Create or select a Supabase project dedicated to Pondbound. Do not reuse PaServe
 
 The initial Player model lives in a private `game` schema. Keep this schema out of Supabase's exposed Data API schemas and do not grant `anon` or `authenticated` direct table access. If a future table is exposed, enable and test Row Level Security before making it client-accessible. The NestJS API will own gameplay writes.
 
-The existing PondBound Development project now has the initial migration, restricted roles and private Storage bucket applied. Credentials remain local and ignored. A fresh clone runs without them; connecting that clone to a database requires its own environment configuration.
+The existing PondBound Development project now has both foundation migrations, restricted roles and the private Storage bucket applied. Credentials remain local and ignored. A fresh clone runs without them; connecting that clone to a database requires its own environment configuration.
 
-The 00.08 forward migration is tested locally but has not been applied to the hosted project; its recovery backup/deployment is awaiting explicit approval. Running `db:deploy` applies all pending migrations. Readiness confirms connectivity rather than migration completeness. See the [environment runbook](RUNBOOK.md) for expected responses and troubleshooting.
+The 00.08 forward migration was applied during Phase 00 closeout after verifying UTC, an empty Player table and a schema-only recovery checkpoint; status and runtime permissions passed afterward. No private data rows were exported. Running `db:deploy` applies all pending migrations. Readiness confirms connectivity rather than migration completeness. See the [environment runbook](RUNBOOK.md) for expected responses and troubleshooting.
 
 ## Commands
 
