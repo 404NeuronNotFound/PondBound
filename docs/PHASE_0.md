@@ -16,7 +16,7 @@ Establish the monorepo and runnable stack before Phase 1 world development. Pres
 
 ## Completion boundary
 
-A real Supabase PostgreSQL connection must be configured and verified before Phase 0 is fully complete. No database credentials were supplied, so cloud setup and the first applied migration remain pending. The preview is an engine integration check; it is not a playable world.
+The Supabase PostgreSQL connection, initial migration, runtime permissions and private Storage bucket were configured and verified in 00.04. Further Phase 00 tasks, including authentication, remain separate. The preview is an engine integration check; it is not a playable world.
 
 ## 00.01 — Monorepo and workspace setup
 
@@ -59,6 +59,26 @@ Global DTO validation rejects extra and invalid fields, transforms DTO instances
 HTTP integration tests cover probe aliases, all readiness states, URI version selection, DTO validation, malformed JSON, unknown routes, and exception redaction. Test-only controllers are excluded from the production module. Readiness tests use a substituted provider for connected/unavailable cases; live Supabase connectivity remains pending.
 
 Verification on November 3, 2026: `pnpm check` passed lint, workspace type checking, all 8 backend tests, all 12 frontend tests, and production builds. Live localhost checks returned 200 for `/health`, `/api/v1`, and `/api/health`; 503 for `/ready` and its alias with no database configured; and 404 for unsupported versions and unknown root paths. This completes 00.03's API foundation scope; it does not verify a live Supabase connection.
+
+## 00.04 — Supabase and Prisma
+
+Configured the user-selected existing PondBound Development project. The private `game` schema and initial Player migration are applied. Separate `pondbound_migrator` and `pondbound_api` logins use separate ignored configuration files; runtime has no elevated attributes, role memberships, DDL or migration-history access. RLS permits only explicit backend access, and public/authenticated database roles have no game-schema grants.
+
+The server owns one bounded PostgreSQL pool, using verified TLS and the provider's public CA. Runtime and migration connections use Supavisor session mode; the migration engine enforces strict TLS with its CA parameter. The private `pondbound-media` bucket accepts PNG/WebP/JPEG objects up to 5 MB.
+
+Verification on November 3, 2026:
+
+- `pnpm check` passed lint, workspace typecheck, all 12 frontend tests, all 12 backend tests and production builds. Prisma schema validation passed.
+- Five integration tests passed against an isolated PostgreSQL 17.11 database: migration redeployment, permissions, RLS-backed Prisma CRUD/rollback, bounded pooling and real database readiness.
+- The live Supabase migration completed and `db:status` reported up to date. `db:verify` passed against the restricted runtime login.
+- Live API `/ready` and its frontend proxy returned `ok` / `connected` after the app restart.
+- The browser's public Supabase client was denied the `game` schema with `PGRST106`.
+- Storage server upload/download succeeded; anonymous reads, uploads and public-URL access failed. Temporary test objects were removed.
+- Runtime, migration, provisioning and browser environment files are ignored by Git. Server secrets were not copied into frontend configuration.
+
+See the [infrastructure guide](../deployment/supabase/README.md) for repeatable provisioning, credentials, pooling and migration authoring. Auth and player upload features remain outside 00.04.
+
+00.04 acceptance follow-up: added a GitHub Actions workflow with disposable PostgreSQL and no cloud credentials. A fresh local clone passed frozen installation, the full CI command sequence and a migration to an asserted-clean database with `CI=true`. The secret-boundary guard passed against real local configuration and the browser build; negative canary/browser-variable cases were rejected. This verifies the CI commands locally; a GitHub-hosted run is pending a push.
 
 ## Initial scaffold verification — November 3, 2026
 

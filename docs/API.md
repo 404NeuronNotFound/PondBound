@@ -52,4 +52,6 @@ Run `pnpm test` from the root to build shared dependencies and execute frontend 
 
 Readiness HTTP tests cover unconfigured, unavailable and connected states through a substituted provider. The ordinary app test checks real unconfigured behavior. These tests do not establish a live Supabase database connection.
 
+00.04 additionally verified real readiness against isolated PostgreSQL and the configured Supabase project. The live development API now reports `database: connected`. Credentials and infrastructure checks are documented in the [Supabase guide](../deployment/supabase/README.md).
+
 Implementation references: [NestJS versioning](https://docs.nestjs.com/techniques/versioning), [validation](https://docs.nestjs.com/techniques/validation), and [exception filters](https://docs.nestjs.com/exception-filters).

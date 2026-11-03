@@ -8,11 +8,16 @@
     "typecheck": "pnpm --filter @pondbound/shared --filter @pondbound/game-config build && pnpm -r typecheck",
     "lint": "eslint apps packages --max-warnings=0",
     "test": "pnpm --filter @pondbound/shared --filter @pondbound/game-config build && pnpm --filter @pondbound/web --filter @pondbound/api test",
-    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
+    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm check:secrets",
+    "check:secrets": "node scripts/check-secrets.mjs",
     "db:generate": "pnpm --filter @pondbound/api db:generate",
     "db:validate": "pnpm --filter @pondbound/api db:validate",
     "db:migrate": "pnpm --filter @pondbound/api db:migrate",
-    "db:deploy": "pnpm --filter @pondbound/api db:deploy"
+    "db:deploy": "pnpm --filter @pondbound/api db:deploy",
+    "db:status": "pnpm --filter @pondbound/api db:status",
+    "db:bootstrap": "pnpm --filter @pondbound/api db:bootstrap",
+    "db:verify": "pnpm --filter @pondbound/api db:verify",
+    "storage:provision": "pnpm --filter @pondbound/api storage:provision"
   },
   "devDependencies": { "eslint": "^10.10.0", "typescript-eslint": "^8.69.0", "typescript": "~6.0.2" }
 }

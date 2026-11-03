@@ -3,13 +3,18 @@ import type { OnModuleDestroy } from '@nestjs/common';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../generated/prisma/client.js';
 import { environment } from '../config/environment.js';
+import { Pool } from 'pg';
+import { createPoolConfig } from './pool-config.js';
 
 @Injectable()
 export class DatabaseService implements OnModuleDestroy {
   private readonly logger = new Logger(DatabaseService.name);
-  private readonly client = environment.DATABASE_URL ? new PrismaClient({
-    adapter: new PrismaPg({ connectionString: environment.DATABASE_URL, connectionTimeoutMillis: 3000, max: 5 }),
-  }) : null;
+  private readonly pool = environment.DATABASE_URL ? new Pool(createPoolConfig(environment)) : null;
+  private readonly client = this.pool ? new PrismaClient({ adapter: new PrismaPg(this.pool, { schema: 'game' }) }) : null;
+
+  constructor() {
+    this.pool?.on('error', () => this.logger.warn('An idle database connection failed.'));
+  }
 
   async readiness(): Promise<'connected' | 'unconfigured' | 'unavailable'> {
     if (!this.client) return 'unconfigured';
@@ -21,5 +26,8 @@ export class DatabaseService implements OnModuleDestroy {
       return 'unavailable';
     }
   }
-  async onModuleDestroy() { await this.client?.$disconnect(); }
+  async onModuleDestroy() {
+    try { await this.client?.$disconnect(); }
+    finally { await this.pool?.end(); }
+  }
 }

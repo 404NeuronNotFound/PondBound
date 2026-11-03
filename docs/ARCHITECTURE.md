@@ -10,7 +10,7 @@ The shell includes active navigation, a skip link, main-content focus and docume
 
 NestJS owns gameplay decisions and validates request DTOs through a global validation pipe. `AppModule` composes `HealthModule`, which imports `DatabaseModule`. The foundation exposes operational probes and versioned API identity. Application routes use `/api/v1/...`; a global exception filter provides consistent JSON errors and hides internal server details. See the [API guide](API.md). There are no fish, currency, trading, enhancement, or authentication endpoints yet.
 
-Prisma connects NestJS to PostgreSQL using the PostgreSQL driver adapter. Supabase will host PostgreSQL, Auth, Storage and selected Realtime services. The optional public Supabase client is prepared in the browser; authentication and realtime behavior are deferred to their relevant phases.
+Prisma connects NestJS to Supabase PostgreSQL through one bounded `pg.Pool` per API process. Runtime and migration logins are distinct. PostgreSQL and the private media bucket are provisioned in the dedicated development project. Auth and selected Realtime behavior are deferred to their relevant tasks. See the [infrastructure guide](../deployment/supabase/README.md).
 
 ## Boundaries
 
@@ -28,7 +28,7 @@ The initial private database schema reserves player identity only. It has no Gol
 
 `GET /health` reports API liveness. `GET /ready` executes `SELECT 1` through Prisma and reports database readiness separately. Original paths `/api/health` and `/api/health/ready` remain compatibility aliases. Probes are version-neutral. An unconfigured database does not prevent frontend and server development.
 
-Database credentials belong only to the API. Browser variables must use public Supabase credentials. No service-role key is included. CORS is restricted to configured frontend origins. Bind the API appropriately behind a trusted reverse proxy before deployment.
+Runtime database credentials belong only in the API's ignored runtime environment. The Prisma CLI loads a separate ignored migration environment; provisioning scripts load a separate administration environment. The server secret key is used only by infrastructure scripts. Browser variables contain public Supabase credentials. CORS is restricted to configured frontend origins. Bind the API appropriately behind a trusted reverse proxy before deployment.
 
 ## References
 

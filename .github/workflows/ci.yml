@@ -1,0 +1,50 @@
+name: Foundation verification
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: pondbound_test_ci
+          POSTGRES_USER: postgres
+          # Disposable service credential, never a Supabase/project credential.
+          POSTGRES_PASSWORD: ci_ephemeral_only
+        ports:
+          - '127.0.0.1:5432:5432'
+        options: >-
+          --health-cmd "pg_isready -U postgres -d pondbound_test_ci"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - uses: pnpm/action-setup@f520eceda224fe1a4aed5a2a27a194379a409996 # v6
+        with:
+          run_install: false
+      - name: Install from lockfile
+        run: pnpm install --frozen-lockfile
+      - name: Create harmless server-only build canary
+        run: node --input-type=module -e "import { appendFileSync } from 'node:fs'; import { randomBytes } from 'node:crypto'; appendFileSync(process.env.GITHUB_ENV, 'SERVER_ONLY_SECRET_CANARY=' + randomBytes(32).toString('hex') + '\n');"
+      - name: Lint, typecheck, test, build and check secret boundaries
+        run: pnpm check
+      - name: Validate Prisma schema
+        run: pnpm db:validate
+      - name: Deploy migrations to clean PostgreSQL and test permissions
+        run: pnpm --filter @pondbound/api test:database
+        env:
+          TEST_DB_ADMIN_URL: postgresql://postgres:ci_ephemeral_only@127.0.0.1:5432/pondbound_test_ci
