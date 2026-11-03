@@ -32,7 +32,9 @@ The separate database suite requires `TEST_DB_ADMIN_URL` pointing to an isolated
 
 [The workflow](../.github/workflows/ci.yml) runs on pull requests, pushes and manual dispatch. It pins action revisions, grants read-only repository access and cancels superseded runs for the same ref. Each job installs the frozen lockfile, runs `pnpm check`, validates Prisma and tests migration/permissions against a fresh PostgreSQL 17 service. It uses disposable fixture credentials and a random harmless server-only build canary; no Supabase secrets are required.
 
-A successful local run verifies the commands. A hosted Actions result is available only after these changes are pushed. Requiring the check before merge is a repository branch-protection setting, separate from the workflow.
+`main` is protected by a required `verify` status check bound to the GitHub Actions app. Pull requests must pass that check against an up-to-date base before merging; enforcement includes repository administrators. Direct pushes cannot bypass this requirement. No external review approval is required for this solo repository. Branch protection is a repository setting, separate from the workflow file, and must be configured again if the repository is recreated.
+
+The initial [hosted pull-request run](https://github.com/404NeuronNotFound/PondBound/actions/runs/41620220546) passed frozen installation, the complete quality gate, Prisma validation and the disposable-database suite. GitHub also reported the PR as blocked while its required check was pending.
 
 ## Optional pre-commit hook
 
