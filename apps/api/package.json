@@ -19,6 +19,7 @@
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
     "db:status": "prisma migrate status",
+    "db:seed": "prisma db seed",
     "db:bootstrap": "node scripts/bootstrap-database.mjs",
     "db:verify": "node scripts/verify-database.mjs",
     "storage:provision": "node scripts/provision-storage.mjs",

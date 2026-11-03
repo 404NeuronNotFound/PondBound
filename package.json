@@ -26,6 +26,7 @@
     "db:migrate": "pnpm --filter @pondbound/api db:migrate",
     "db:deploy": "pnpm --filter @pondbound/api db:deploy",
     "db:status": "pnpm --filter @pondbound/api db:status",
+    "db:seed": "pnpm --filter @pondbound/api db:seed",
     "db:bootstrap": "pnpm --filter @pondbound/api db:bootstrap",
     "db:verify": "pnpm --filter @pondbound/api db:verify",
     "storage:provision": "pnpm --filter @pondbound/api storage:provision",

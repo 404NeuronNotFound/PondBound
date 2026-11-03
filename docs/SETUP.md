@@ -59,6 +59,7 @@ The existing PondBound Development project now has the initial migration, restri
 | `pnpm db:deploy`                    | Apply committed migrations using migration-only credentials                          |
 | `pnpm db:verify`                    | Check live runtime permissions and browser isolation                                 |
 | `pnpm db:status`                    | Inspect applied migration status                                                     |
+| `pnpm db:seed`                      | Seed deterministic fixtures in a disposable local database only                      |
 | `pnpm storage:provision`            | Create or verify the private Storage bucket                                          |
 | `pnpm auth:verify`                  | Explicit live Auth/profile smoke test with temporary development users and cleanup   |
 

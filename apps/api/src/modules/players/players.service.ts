@@ -1,4 +1,5 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
 import type { PlayerProfileResponse } from '@pondbound/shared';
 import { DatabaseService } from '../../database/database.service.js';
 import { Prisma } from '../../generated/prisma/client.js';
@@ -11,9 +12,12 @@ export class PlayersService {
   async initialize(authId: string): Promise<PlayerProfileResponse> {
     let player: Player;
     try {
+      // Keep creation compatible while the new database defaults are rolled out.
+      // After migration, the database trigger owns both timestamps.
+      const now = new Date();
       player = await this.database.prisma.player.upsert({
         where: { authId },
-        create: { authId },
+        create: { id: randomUUID(), authId, createdAt: now, updatedAt: now },
         update: {},
       });
     } catch (error) {
